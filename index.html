@@ -1,2 +1,535 @@
-            
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>InstaFace</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* Toast Notification for Share */
+        .toast {
+            position: fixed;
+            top: 20px;
+            background: #262626;
+            color: #ffffff;
+            border: 1px solid #363636;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            display: none;
+            z-index: 10000;
+            animation: fadeInOut 2.5s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(-20px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
+
+        /* Top Header (Instagram Style) */
+        .app-header {
+            width: 100%;
+            max-width: 500px;
+            height: 50px;
+            background-color: #000000;
+            border-bottom: 1px solid #262626;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .app-header h1 {
+            font-size: 22px;
+            font-weight: bold;
+            font-style: italic;
+            letter-spacing: -0.5px;
+        }
+
+        .app-header .header-icons {
+            display: flex;
+            gap: 18px;
+        }
+
+        .header-icons i {
+            font-size: 22px;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        /* Main Container */
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 0;
+        }
+
+        /* Create Post Box (Minimalist Insta Style) */
+        .create-post-box {
+            background-color: #000000;
+            border-bottom: 1px solid #262626;
+            padding: 16px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid #262626;
+        }
+
+        .create-post-box textarea {
+            flex: 1;
+            background: transparent;
+            border: none;
+            resize: none;
+            font-size: 15px;
+            outline: none;
+            padding-top: 8px;
+            color: #ffffff;
+        }
+
+        .create-post-box textarea::placeholder {
+            color: #737373;
+        }
+
+        .url-input-field {
+            width: 100%;
+            border: 1px solid #363636;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            outline: none;
+            background-color: #121212;
+            color: #ffffff;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .photo-btn-label {
+            color: #0095f6;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .submit-post-btn {
+            background-color: #0095f6;
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .submit-post-btn:hover {
+            background-color: #1877f2;
+        }
+
+        /* Feed */
+        .feed-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post-card {
+            background-color: #000000;
+            border-bottom: 1px solid #262626;
+            padding-bottom: 10px;
+        }
+
+        .post-card-header {
+            display: flex;
+            align-items: center;
+            padding: 12px 14px;
+        }
+
+        .post-user-meta {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+        }
+
+        .username {
+            font-weight: 600;
+            font-size: 14px;
+            color: #ffffff;
+        }
+
+        .time-stamp {
+            font-size: 11px;
+            color: #a8a8a8;
+        }
+
+        .post-content-img {
+            width: 100%;
+            max-height: 450px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Action Buttons underneath Image */
+        .post-action-bar {
+            display: flex;
+            gap: 16px;
+            padding: 12px 14px 6px 14px;
+        }
+
+        .action-icon {
+            font-size: 22px;
+            color: #ffffff;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        .action-icon:active {
+            transform: scale(1.2);
+        }
+
+        .fa-heart.active-liked {
+            color: #ff3040;
+            animation: heartPop 0.3s ease;
+        }
+
+        @keyframes heartPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        /* Likes Display */
+        .likes-display {
+            padding: 4px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        /* Caption Text */
+        .post-content-text {
+            padding: 2px 14px 8px 14px;
+            font-size: 14px;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        .post-content-text strong {
+            margin-right: 6px;
+        }
+
+        /* Comments Area */
+        .comments-section {
+            padding: 0 14px;
+        }
+
+        .comments-box-list {
+            list-style: none;
+            max-height: 100px;
+            overflow-y: auto;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        .comments-box-list li {
+            margin-bottom: 4px;
+            color: #f5f5f5;
+        }
+
+        .comments-box-list strong {
+            color: #ffffff;
+            margin-right: 6px;
+        }
+
+        .input-comment-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #121212;
+            padding: 4px 0;
+        }
+
+        .input-comment-row input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 13px;
+            color: #ffffff;
+            padding: 4px 0;
+        }
+
+        .input-comment-row input::placeholder {
+            color: #737373;
+        }
+
+        .send-comment-btn {
+            background: transparent;
+            border: none;
+            color: #0095f6;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            padding-left: 10px;
+        }
+
+        /* Bottom Nav Bar (Instagram Style) */
+        .bottom-nav {
+            width: 100%;
+            max-width: 500px;
+            height: 50px;
+            background-color: #000000;
+            border-top: 1px solid #262626;
+            position: fixed;
+            bottom: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .bottom-nav i {
+            font-size: 22px;
+            color: #ffffff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Notification Toast -->
+    <div id="toastNotification" class="toast">Link copied to clipboard!</div>
+
+    <!-- App Header -->
+    <div class="app-header">
+        <h1>InstaFace</h1>
+        <div class="header-icons">
+            <i class="fa-regular fa-heart"></i>
+            <i class="fa-brands fa-facebook-messenger"></i>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="app-container">
+        
+        <!-- Create Post Box -->
+        <div class="create-post-box">
+            <div class="input-row">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="user-avatar" alt="User">
+                <textarea id="postInputText" placeholder="Write a caption..."></textarea>
+            </div>
+            <input type="text" id="postImgUrl" class="url-input-field" placeholder="Paste Image URL here...">
+            <div class="action-row">
+                <div class="photo-btn-label" onclick="toggleUrlInput()">
+                    <i class="fa-regular fa-image fa-lg"></i> Add Photo
+                </div>
+                <button class="submit-post-btn" onclick="addNewPost()">Share</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Feed List -->
+        <div class="feed-list" id="mainFeed"></div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+        <i class="fa-solid fa-house"></i>
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <i class="fa-regular fa-square-plus" onclick="document.getElementById('postInputText').focus(); toggleUrlInput();"></i>
+        <i class="fa-solid fa-clapperboard"></i>
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">
+    </div>
+
+    <script>
+        // LocalStorage logic to keep data alive
+        let posts = JSON.parse(localStorage.getItem('instaface_dark_posts')) || [
+            {
+                id: 1,
+                username: "creative_mind",
+                time: "1 hour ago",
+                text: "Switching to pure dark mode aesthetic. Welcome to the clean slate! 🌌",
+                img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600",
+                likes: 12,
+                likedByUser: false,
+                comments: ["This looks incredible!", "So clean 😍"]
+            }
+        ];
+
+        // Render posts
+        function renderFeed() {
+            const feed = document.getElementById('mainFeed');
+            feed.innerHTML = "";
+
+            posts.forEach(post => {
+                let imgTag = post.img ? `<img src="${post.img}" class="post-content-img" ondblclick="handleLike(${post.id})">` : '';
+                let heartIcon = post.likedByUser ? 'fa-solid fa-heart active-liked' : 'fa-regular fa-heart';
+                
+                let commentItems = "";
+                post.comments.forEach(c => {
+                    commentItems += `<li><strong>visitor</strong> ${c}</li>`;
+                });
+
+                const postHTML = `
+                    <div class="post-card" id="post-${post.id}">
+                        <div class="post-card-header">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="user-avatar">
+                            <div class="post-user-meta">
+                                <span class="username">${post.username}</span>
+                                <span class="time-stamp">${post.time}</span>
+                            </div>
+                        </div>
+                        ${imgTag}
+                        <div class="post-action-bar">
+                            <i class="${heartIcon} action-icon" onclick="handleLike(${post.id})"></i>
+                            <i class="fa-regular fa-comment action-icon" onclick="focusCommentField(${post.id})"></i>
+                            <i class="fa-regular fa-paper-plane action-icon" onclick="triggerShare()"></i>
+                        </div>
+                        <div class="likes-display"><span>${post.likes}</span> likes</div>
+                        <div class="post-content-text">
+                            <strong>${post.username}</strong>${post.text}
+                        </div>
+                        <div class="comments-section">
+                            <ul class="comments-box-list">${commentItems}</ul>
+                            <div class="input-comment-row">
+                                <input type="text" placeholder="Add a comment..." onkeypress="checkCommentEnter(event, ${post.id}, this)">
+                                <button class="send-comment-btn" onclick="addComment(${post.id}, this)">Post</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                feed.insertAdjacentHTML('beforeend', postHTML);
+            });
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('instaface_dark_posts', JSON.stringify(posts));
+        }
+
+        function toggleUrlInput() {
+            const imgField = document.getElementById('postImgUrl');
+            imgField.style.display = (imgField.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function addNewPost() {
+            const txt = document.getElementById('postInputText').value.trim();
+            const url = document.getElementById('postImgUrl').value.trim();
+
+            if(!txt && !url) {
+                alert("Please add a caption or an image URL!");
+                return;
+            }
+
+            const newPost = {
+                id: Date.now(),
+                username: "my_profile",
+                time: "Just now",
+                text: txt,
+                img: url || null,
+                likes: 0,
+                likedByUser: false,
+                comments: []
+            };
+
+            posts.unshift(newPost);
+            saveToStorage();
+            renderFeed();
+
+            document.getElementById('postInputText').value = "";
+            document.getElementById('postImgUrl').value = "";
+            document.getElementById('postImgUrl').style.display = 'none';
+        }
+
+        function handleLike(id) {
+            const post = posts.find(p => p.id === id);
+            if(post) {
+                if(post.likedByUser) {
+                    post.likes--;
+                    post.likedByUser = false;
+                } else {
+                    post.likes++;
+                    post.likedByUser = true;
+                }
+                saveToStorage();
+                renderFeed();
+            }
+        }
+
+        function addComment(id, btn) {
+            const input = btn.previousElementSibling;
+            const text = input.value.trim();
+            if(!text) return;
+
+            const post = posts.find(p => p.id === id);
+            if(post) {
+                post.comments.push(text);
+                saveToStorage();
+                renderFeed();
+            }
+        }
+
+        function checkCommentEnter(e, id, input) {
+            if(e.key === 'Enter') {
+                const btn = input.nextElementSibling;
+                addComment(id, btn);
+            }
+        }
+
+        function focusCommentField(id) {
+            const postEl = document.getElementById(`post-${id}`);
+            postEl.querySelector('.input-comment-row input').focus();
+        }
+
+        function triggerShare() {
+            const toast = document.getElementById('toastNotification');
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2500);
+        }
+
+        // Run on load
+        renderFeed();
+    </script>
+</body>
+</html>            
         
