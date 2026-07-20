@@ -608,6 +608,45 @@
         </div>
     </div>
 
+    <!-- Facebook Style Profile View Dashboard -->
+    <div id="fbProfileDashboard" class="modal-overlay" style="align-items: flex-end;">
+        <div class="profile-modal" style="max-width: 480px; width: 100%; border-radius: 24px 24px 0 0; padding: 0; overflow-y: auto; max-height: 85vh; text-align: left;">
+            
+            <!-- Cover & Avatar Grid -->
+            <div style="position: relative; height: 160px; background: linear-gradient(135deg, #1e1b4b, #3b1d5c); border-bottom: 1px solid var(--border-color);">
+                <button onclick="closeFbProfile()" style="position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; z-index: 10;"><i class="fa-solid fa-arrow-left"></i></button>
+                
+                <div class="avatar-ring" style="width: 90px; height: 90px; position: absolute; bottom: -35px; left: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+                    <img id="fbProfileAvatar" src="" class="user-avatar" style="border: 3px solid var(--card-color);">
+                </div>
+            </div>
+
+            <!-- Profile Details -->
+            <div style="padding: 45px 20px 20px 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <h2 id="fbProfileName" style="font-size: 22px; font-weight: 700; color: var(--text-main);"></h2>
+                        <p style="font-size: 13px; color: var(--accent-color); margin-top: 2px;">@matrix_operator</p>
+                    </div>
+                    <button onclick="openProfileModal(); closeFbProfile();" style="background: var(--border-color); color: var(--text-main); border: none; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer;"><i class="fa-regular fa-pen-to-square"></i> Edit Matrix</button>
+                </div>
+                
+                <p style="font-size: 14px; color: var(--text-muted); margin-top: 15px; line-height: 1.4; border-left: 3px solid var(--accent-color); padding-left: 10px;">
+                    Cyber Athlete & Operational Developer. Exploring the boundaries of the grid. 🏏⚡
+                </p>
+
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
+
+                <!-- Stats Box -->
+                <div style="display: flex; gap: 30px; margin-bottom: 10px;">
+                    <div><strong id="fbPostCount" style="color: var(--text-main); font-size: 18px;">0</strong> <span style="color: var(--text-muted); font-size: 14px;">Broadcasts</span></div>
+                    <div><strong style="color: var(--text-main); font-size: 18px;">1.2k</strong> <span style="color: var(--text-muted); font-size: 14px;">Nodes</span></div>
+                    <div><strong style="color: var(--text-main); font-size: 18px;">840</strong> <span style="color: var(--text-muted); font-size: 14px;">Signals</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- App Header -->
     <div class="app-header">
         <h1>InstaFace</h1>
@@ -682,7 +721,7 @@
         <i class="fa-solid fa-magnifying-glass" onclick="toggleSearchBox()"></i>
         <i class="fa-regular fa-square-plus" onclick="document.getElementById('postFileInput').click();"></i>
         <i class="fa-regular fa-compass" onclick="triggerShare()"></i>
-        <img id="navUserAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="bottom-nav-avatar" onclick="openProfileModal()">
+        <img id="navUserAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="bottom-nav-avatar" onclick="openFbProfile()">
     </div>
 
     <!-- Functional Engine Core -->
@@ -837,19 +876,32 @@
             renderFeed();
         }
 
+        // Facebook Style Dashboard Handlers
+        function openFbProfile() {
+            document.getElementById('fbProfileAvatar').src = profileConfig.avatar;
+            document.getElementById('fbProfileName').innerText = profileConfig.username;
+            
+            let userPostsCount = posts.filter(p => p.username === profileConfig.username).length;
+            document.getElementById('fbPostCount').innerText = userPostsCount;
+            
+            document.getElementById('fbProfileDashboard').classList.add('open');
+        }
+
+        function closeFbProfile() {
+            document.getElementById('fbProfileDashboard').classList.remove('open');
+        }
+
         // Double Tap To Like Activation
         function detectDoubleTap(event, id) {
             const currentTime = new Date().getTime();
             const tapLength = currentTime - lastTap;
             if (tapLength < 300 && tapLength > 0) {
-                // Heart graphic popup trigger
                 const overlayHeart = document.getElementById(`dt-${id}`);
                 if(overlayHeart) {
                     overlayHeart.classList.add('animate');
                     setTimeout(() => overlayHeart.classList.remove('animate'), 700);
                 }
                 
-                // Force operational like
                 const post = posts.find(p => p.id === id);
                 if(post && !post.likedByUser) {
                     post.likes++;
