@@ -80,6 +80,7 @@
 
             <!-- Dynamic Posts Feed -->
             <div id="feedContainer">
+                <!-- Sample Post -->
                 <div class="post-card">
                     <div class="post-header">
                         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150">
@@ -87,7 +88,7 @@
                     </div>
                     <img class="post-image" src="https://assets.mixkit.co/videos/preview/mixkit-neon-light-from-a-tunnel-in-a-futuristic-city-43225-large.jpg">
                     <div class="post-actions">
-                        <i class="fa-regular fa-heart" onclick="this.classList.toggle('fa-solid'); this.classList.toggle('fa-regular'); this.style.color='#ef4444'"></i>
+                        <i class="fa-regular fa-heart" onclick="toggleLike(this)"></i>
                         <i class="fa-regular fa-comment"></i>
                         <i class="fa-regular fa-paper-plane"></i>
                     </div>
@@ -106,6 +107,11 @@
     </div>
 
     <script>
+        // Load stored posts when page loads
+        window.onload = function() {
+            loadPosts();
+        }
+
         function logout() {
             localStorage.removeItem('cyberUser');
             alert('Logged out successfully!');
@@ -119,6 +125,12 @@
             }
         }
 
+        function toggleLike(element) {
+            element.classList.toggle('fa-solid');
+            element.classList.toggle('fa-regular');
+            element.style.color = element.classList.contains('fa-solid') ? '#ef4444' : '#f3f4f6';
+        }
+
         function addNewPost() {
             const caption = document.getElementById('postCaption').value;
             const fileInput = document.getElementById('mediaInput').files[0];
@@ -129,39 +141,87 @@
             }
 
             const username = localStorage.getItem('cyberUser') || 'cyber_user';
-            const feed = document.getElementById('feedContainer');
             
-            let mediaHtml = '';
+            let mediaUrl = '';
+            let mediaType = 'image';
+
             if(fileInput) {
-                const mediaUrl = URL.createObjectURL(fileInput);
+                mediaUrl = URL.createObjectURL(fileInput);
                 if(fileInput.type.includes('video')) {
-                    mediaHtml = `<video class="post-image" src="${mediaUrl}" controls autoplay muted></video>`;
-                } else {
-                    mediaHtml = `<img class="post-image" src="${mediaUrl}">`;
+                    mediaType = 'video';
                 }
             }
 
-            const newPostHTML = `
+            const newPost = {
+                username: username,
+                caption: caption,
+                mediaUrl: mediaUrl,
+                mediaType: mediaType,
+                avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
+            };
+
+            // Save to localStorage so other pages/sessions can persist if needed
+            let posts = JSON.parse(localStorage.getItem('cyberPosts')) || [];
+            posts.unshift(newPost); // Add to beginning
+            localStorage.setItem('cyberPosts', JSON.stringify(posts));
+
+            document.getElementById('postCaption').value = '';
+            document.getElementById('mediaInput').value = '';
+            
+            loadPosts();
+            alert('Post published successfully!');
+        }
+
+        function loadPosts() {
+            const feed = document.getElementById('feedContainer');
+            let posts = JSON.parse(localStorage.getItem('cyberPosts')) || [];
+
+            // Default post if storage is empty
+            let html = `
                 <div class="post-card">
                     <div class="post-header">
                         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150">
-                        <span>${username}</span>
+                        <span>neon_vector</span>
                     </div>
-                    ${mediaHtml}
+                    <img class="post-image" src="https://assets.mixkit.co/videos/preview/mixkit-neon-light-from-a-tunnel-in-a-futuristic-city-43225-large.jpg">
                     <div class="post-actions">
-                        <i class="fa-regular fa-heart" onclick="this.classList.toggle('fa-solid'); this.classList.toggle('fa-regular'); this.style.color='#ef4444'"></i>
+                        <i class="fa-regular fa-heart" onclick="toggleLike(this)"></i>
                         <i class="fa-regular fa-comment"></i>
                         <i class="fa-regular fa-paper-plane"></i>
                     </div>
-                    <div class="post-caption"><b>${username}</b> ${caption}</div>
+                    <div class="post-caption"><b>neon_vector</b> Welcome to the redesigned matrix! ⚡</div>
                 </div>
             `;
 
-            feed.insertAdjacentHTML('afterbegin', newPostHTML);
-            document.getElementById('postCaption').value = '';
-            document.getElementById('mediaInput').value = '';
-            alert('Post published successfully!');
+            posts.forEach(post => {
+                let mediaElement = '';
+                if(post.mediaUrl) {
+                    if(post.mediaType === 'video') {
+                        mediaElement = `<video class="post-image" src="${post.mediaUrl}" controls autoplay muted></video>`;
+                    } else {
+                        mediaElement = `<img class="post-image" src="${post.mediaUrl}">`;
+                    }
+                }
+
+                html += `
+                    <div class="post-card">
+                        <div class="post-header">
+                            <img src="${post.avatar}">
+                            <span>${post.username}</span>
+                        </div>
+                        ${mediaElement}
+                        <div class="post-actions">
+                            <i class="fa-regular fa-heart" onclick="toggleLike(this)"></i>
+                            <i class="fa-regular fa-comment"></i>
+                            <i class="fa-regular fa-paper-plane"></i>
+                        </div>
+                        <div class="post-caption"><b>${post.username}</b> ${post.caption}</div>
+                    </div>
+                `;
+            });
+
+            feed.innerHTML = html;
         }
     </script>
 </body>
-</html>
+</html> 
