@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cyber Reels</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-main: #f3f4f6;
+            --accent-color: #a855f7;
+            --glow: linear-gradient(90deg, #6366f1, #a855f7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Reels Container */
+        .reels-container {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            position: relative;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar */
+        .reels-header {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 60px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+        }
+
+        .reels-header h2 {
+            font-size: 20px;
+            font-weight: 800;
+            background: var(--glow);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .reels-header i {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Video Feed (Scrollable) */
+        .reels-feed {
+            flex: 1;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scrollbar-width: none; /* Firefox */
+        }
+        .reels-feed::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+        .reel-video-box {
+            width: 100%;
+            height: 100vh;
+            scroll-snap-align: start;
+            position: relative;
+            background: #050505;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Right Side Actions */
+        .reel-actions {
+            position: absolute;
+            right: 15px;
+            bottom: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            align-items: center;
+            z-index: 5;
+        }
+
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .action-item i {
+            font-size: 26px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
+        .action-item i:active { transform: scale(1.2); }
+        .action-item span {
+            font-size: 12px;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .fa-heart.liked {
+            color: #ef4444;
+        }
+
+        /* Bottom Overlay Meta (Username & Caption) */
+        .reel-meta {
+            position: absolute;
+            left: 15px;
+            bottom: 90px;
+            right: 80px;
+            z-index: 5;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .user-info img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-color);
+        }
+
+        .user-info span {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .caption {
+            font-size: 13px;
+            line-height: 1.4;
+            color: #e5e7eb;
+        }
+
+        /* Floating Navbar for Reels */
+        .bottom-nav {
+            width: 100%;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 1px solid #1f2937;
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .bottom-nav i {
+            font-size: 20px;
+            color: #9ca3af;
+            cursor: pointer;
+        }
+        .bottom-nav i.active {
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="reels-container">
+        
+        <!-- Header -->
+        <div class="reels-header">
+            <h2>Cyber Reels</h2>
+            <i class="fa-solid fa-camera" onclick="alert('Camera matrix coming soon!')"></i>
+        </div>
+
+        <!-- Video Feed Section -->
+        <div class="reels-feed" id="reelsFeed">
+            <!-- Sample Reel 1 -->
+            <div class="reel-video-box">
+                <video src="https://assets.mixkit.co/videos/preview/mixkit-neon-light-from-a-tunnel-in-a-futuristic-city-43225-large.mp4" loop muted playsinline onclick="togglePlay(this)"></video>
+                
+                <div class="reel-actions">
+                    <div class="action-item" onclick="toggleLike(this)">
+                        <i class="fa-solid fa-heart"></i>
+                        <span>4.2k</span>
+                    </div>
+                    <div class="action-item">
+                        <i class="fa-solid fa-comment"></i>
+                        <span>184</span>
+                    </div>
+                    <div class="action-item" onclick="alert('Signal shared!')">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </div>
+                </div>
+
+                <div class="reel-meta">
+                    <div class="user-info">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150">
+                        <span>neon_vector</span>
+                    </div>
+                    <p class="caption">Cruising through the cyber grid. Infinite loop activated. ⚡🌐 #cyberpunk #neon</p>
+                </div>
+            </div>
+
+            <!-- Sample Reel 2 -->
+            <div class="reel-video-box">
+                <video src="https://assets.mixkit.co/videos/preview/mixkit-abstract-laser-lights-background-42301-large.mp4" loop muted playsinline onclick="togglePlay(this)"></video>
+                
+                <div class="reel-actions">
+                    <div class="action-item" onclick="toggleLike(this)">
+                        <i class="fa-solid fa-heart"></i>
+                        <span>2.8k</span>
+                    </div>
+                    <div class="action-item">
+                        <i class="fa-solid fa-comment"></i>
+                        <span>92</span>
+                    </div>
+                    <div class="action-item" onclick="alert('Signal shared!')">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </div>
+                </div>
+
+                <div class="reel-meta">
+                    <div class="user-info">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150">
+                        <span>alpha_dev</span>
+                    </div>
+                    <p class="caption">Testing the new laser matrix protocols. Absolute sync! 🧪✨</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation Link back to Feed -->
+        <div class="bottom-nav">
+            <i class="fa-solid fa-layer-group" onclick="window.location.href='index.html'"></i>
+            <i class="fa-solid fa-video active"></i>
+            <i class="fa-regular fa-compass"></i>
+            <i class="fa-regular fa-user" onclick="window.location.href='index.html'"></i>
+        </div>
+
+    </div>
+
+    <script>
+        // Auto-play video on visibility/scroll logic
+        const videos = document.querySelectorAll('video');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.play().catch(error => console.log("Auto-play blocked"));
+                } else {
+                    entry.target.pause();
+                }
+            });
+        }, { threshold: 0.6 });
+
+        videos.forEach(video => observer.observe(video));
+
+        // Tap video to pause/play
+        function togglePlay(video) {
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        }
+
+        // Like button interaction
+        function toggleLike(element) {
+            const heartIcon = element.querySelector('i');
+            const countSpan = element.querySelector('span');
+            heartIcon.classList.toggle('liked');
+        }
+    </style>
+</body>
+</html>
