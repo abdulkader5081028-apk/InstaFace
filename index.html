@@ -3,1014 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>InstaFace Cyber Pro</title>
-    <!-- FontAwesome Elements for Clean Icons -->
+    <title>InstaFace Cyber</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --bg-color: #08090a;
-            --card-color: #111317;
-            --border-color: #1f2937;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --primary-glow: linear-gradient(90deg, #6366f1, #a855f7);
-            --accent-color: #a855f7;
-        }
-
-        /* Neon Theme */
-        .neon-theme {
-            --bg-color: #0c0714;
-            --card-color: #170f26;
-            --border-color: #3b1d5c;
-            --text-main: #ffffff;
-            --text-muted: #c0a9df;
-            --primary-glow: linear-gradient(90deg, #ec4899, #a855f7);
-            --accent-color: #ec4899;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding-bottom: 80px;
-            transition: all 0.3s ease;
-        }
-
-        /* Premium Floating Toast */
-        .toast {
-            position: fixed;
-            top: 25px;
-            background: linear-gradient(135deg, #1e1b4b, #311042);
-            border: 1px solid #4338ca;
-            color: #e0e7ff;
-            padding: 12px 28px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 500;
-            box-shadow: 0 10px 30px rgba(67, 56, 202, 0.3);
-            display: none;
-            z-index: 10000;
-            animation: slideDownFade 2.5s ease-in-out;
-        }
-
-        @keyframes slideDownFade {
-            0% { opacity: 0; transform: translateY(-30px); }
-            15% { opacity: 1; transform: translateY(0); }
-            85% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-30px); }
-        }
-
-        /* Cyberpunk Fluid Header */
-        .app-header {
-            width: 100%;
-            max-width: 480px;
-            height: 60px;
-            background-color: var(--bg-color);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .app-header h1 {
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            background: var(--primary-glow);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .app-header .header-icons {
-            display: flex;
-            gap: 22px;
-        }
-
-        .header-icons i {
-            font-size: 20px;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: color 0.2s;
-        }
+        :root { --bg-color: #000; --text-main: #f3f4f6; --accent: #a855f7; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; height: 100vh; overflow: hidden; }
+        .app-container { width: 100%; max-width: 480px; height: 100vh; background: #000; display: flex; flex-direction: column; position: relative; }
         
-        .header-icons i:hover {
-            color: var(--accent-color);
-        }
+        /* Top Header */
+        .header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; border-bottom: 1px solid #1f2937; }
+        .header h2 { font-size: 22px; font-weight: 800; background: linear-gradient(90deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header-icons i { font-size: 20px; margin-left: 15px; cursor: pointer; }
 
-        /* Container */
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            padding: 12px;
-        }
+        /* Main Content Feed */
+        .main-feed { flex: 1; overflow-y: auto; padding-bottom: 70px; scrollbar-width: none; }
+        .main-feed::-webkit-scrollbar { display: none; }
 
-        /* Cyber Stories Section */
-        .stories-bar {
-            display: flex;
-            gap: 14px;
-            overflow-x: auto;
-            padding: 8px 4px 16px 4px;
-            width: 100%;
-        }
+        /* Story Section */
+        .stories-bar { display: flex; gap: 12px; padding: 12px 16px; overflow-x: auto; border-bottom: 1px solid #1f2937; }
         .stories-bar::-webkit-scrollbar { display: none; }
+        .story-ring { width: 68px; height: 68px; border-radius: 50%; background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af); padding: 2px; display: flex; flex-direction: column; align-items: center; cursor: pointer; flex-shrink: 0; }
+        .story-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #000; }
+        .story-add { background: #262626; display: flex; justify-content: center; align-items: center; font-size: 22px; color: #fff; }
 
-        .story-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            min-width: 68px;
-            cursor: pointer;
-        }
+        /* Upload Box Bar */
+        .upload-section { padding: 12px 16px; border-bottom: 1px solid #1f2937; display: flex; gap: 10px; align-items: center; }
+        .upload-section input { flex: 1; background: #121212; border: 1px solid #262626; padding: 10px 14px; border-radius: 20px; color: #fff; outline: none; font-size: 13px; }
+        .upload-btn { background: #a855f7; color: white; border: none; padding: 8px 14px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 13px; }
 
-        .story-ring {
-            padding: 2px;
-            background: var(--primary-glow);
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-        }
+        /* Post Card */
+        .post-card { margin-bottom: 15px; border-bottom: 1px solid #1f2937; }
+        .post-header { display: flex; align-items: center; padding: 10px 16px; gap: 10px; }
+        .post-header img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+        .post-header span { font-weight: 600; font-size: 14px; }
+        .post-image { width: 100%; max-height: 400px; object-fit: cover; }
+        .post-actions { display: flex; gap: 15px; padding: 10px 16px; font-size: 20px; }
+        .post-caption { padding: 0 16px 12px 16px; font-size: 13px; color: #d1d5db; }
 
-        .story-img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--bg-color);
-        }
-
-        .story-name {
-            font-size: 11px;
-            color: var(--text-muted);
-            max-width: 65px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* Clean Card UI for Post Box */
-        .create-post-box {
-            background: var(--card-color);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-
-        .input-row {
-            display: flex;
-            gap: 14px;
-            margin-bottom: 16px;
-        }
-
-        .avatar-ring {
-            padding: 2px;
-            background: var(--primary-glow);
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-        }
-
-        .user-avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--card-color);
-        }
-
-        .create-post-box textarea {
-            flex: 1;
-            background: transparent;
-            border: none;
-            resize: none;
-            font-size: 15px;
-            outline: none;
-            padding-top: 6px;
-            color: var(--text-main);
-            line-height: 1.5;
-        }
-
-        .create-post-box textarea::placeholder {
-            color: #4b5563;
-        }
-
-        .image-preview-container {
-            width: 100%;
-            margin-bottom: 16px;
-            display: none;
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .image-preview-container img {
-            width: 100%;
-            max-height: 250px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .remove-preview-btn {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 26px;
-            height: 26px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .action-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .photo-btn-label {
-            color: var(--text-muted);
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
-            padding: 8px 14px;
-            border-radius: 30px;
-            background-color: var(--bg-color);
-        }
-
-        .submit-post-btn {
-            background: var(--primary-glow);
-            color: white;
-            border: none;
-            padding: 8px 24px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        /* Feed Elements */
-        .feed-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .post-card {
-            background: var(--card-color);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            overflow: hidden;
-        }
-
-        .post-card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-        }
-
-        .post-user-meta {
-            display: flex;
-            flex-direction: column;
-            margin-left: 12px;
-        }
-
-        .username {
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--text-main);
-        }
-
-        .time-stamp {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 1px;
-        }
-
-        .delete-post-btn {
-            color: #ef4444;
-            cursor: pointer;
-            padding: 4px;
-            opacity: 0.7;
-            transition: opacity 0.2s;
-        }
-        .delete-post-btn:hover { opacity: 1; }
-
-        .img-container {
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-            background: #08090a;
-            user-select: none;
-        }
-
-        .post-content-img {
-            width: 100%;
-            max-height: 440px;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* Double Tap Heart Animation overlay */
-        .double-tap-heart {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            font-size: 80px;
-            color: #ef4444;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 10;
-            text-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
-        }
-        .double-tap-heart.animate {
-            animation: heartFadePop 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes heartFadePop {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-            30% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-            80% { transform: translate(-50%, -50%) scale(0.9); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-        }
-
-        /* Custom Modern Action Panel */
-        .post-action-bar {
-            display: flex;
-            gap: 20px;
-            padding: 16px 16px 8px 16px;
-        }
-
-        .action-icon {
-            font-size: 22px;
-            color: var(--text-muted);
-            cursor: pointer;
-        }
-
-        .fa-heart.active-liked {
-            color: #ef4444;
-            animation: cyberHeart 0.4s ease;
-        }
-
-        @keyframes cyberHeart {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); }
-        }
-
-        .likes-display {
-            padding: 4px 16px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .post-content-text {
-            padding: 4px 16px 16px 16px;
-            font-size: 14px;
-            color: var(--text-muted);
-            line-height: 1.5;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .post-content-text strong {
-            margin-right: 8px;
-            color: var(--text-main);
-        }
-
-        /* Techy Comments Section */
-        .comments-section {
-            padding: 12px 16px 16px 16px;
-            background: rgba(0,0,0,0.15);
-        }
-
-        .comments-box-list {
-            list-style: none;
-            max-height: 110px;
-            overflow-y: auto;
-            margin-bottom: 12px;
-            font-size: 13px;
-        }
-
-        .comments-box-list li {
-            margin-bottom: 6px;
-            color: var(--text-muted);
-        }
-
-        .comments-box-list strong {
-            color: var(--text-main);
-            margin-right: 6px;
-        }
-
-        .input-comment-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 6px 14px;
-        }
-
-        .input-comment-row input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            font-size: 13px;
-            color: white;
-        }
-
-        .send-comment-btn {
-            background: transparent;
-            border: none;
-            color: var(--accent-color);
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        /* Futuristic Bottom Navbar */
-        .bottom-nav {
-            width: 100%;
-            max-width: 480px;
-            height: 60px;
-            background-color: var(--card-color);
-            backdrop-filter: blur(15px);
-            border-top: 1px solid var(--border-color);
-            position: fixed;
-            bottom: 0;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .bottom-nav i {
-            font-size: 20px;
-            color: var(--text-muted);
-            cursor: pointer;
-        }
-        
-        .bottom-nav i:hover, .bottom-nav i.active-nav {
-            color: var(--accent-color);
-        }
-
-        .bottom-nav-avatar {
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1px solid var(--text-muted);
-            cursor: pointer;
-        }
-
-        /* Interactive Search Drawer */
-        .search-container {
-            width: 100%;
-            margin-bottom: 16px;
-            background: var(--card-color);
-            border: 1px solid var(--border-color);
-            padding: 12px;
-            border-radius: 16px;
-            display: none;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            padding: 8px 14px;
-            border-radius: 30px;
-        }
-
-        .search-box input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: white;
-            font-size: 14px;
-            margin-left: 8px;
-        }
-
-        /* Profile & Edit Modal Layout */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 20000;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        .modal-overlay.open { opacity: 1; pointer-events: auto; }
-
-        .profile-modal {
-            background: var(--card-color);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            width: 90%;
-            max-width: 360px;
-            padding: 24px;
-            text-align: center;
-        }
-
-        .modal-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            background: var(--primary-glow);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .modal-input {
-            width: 100%;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            padding: 12px;
-            border-radius: 12px;
-            color: white;
-            margin-bottom: 16px;
-            outline: none;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .modal-btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 30px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .btn-save { background: var(--primary-glow); color: white; }
-        .btn-cancel { background: #374151; color: var(--text-main); }
+        /* Bottom Nav */
+        .bottom-nav { width: 100%; height: 60px; background: rgba(0,0,0,0.95); border-top: 1px solid #1f2937; position: absolute; bottom: 0; display: flex; justify-content: space-around; align-items: center; z-index: 10; }
+        .bottom-nav i { font-size: 20px; color: #9ca3af; cursor: pointer; }
+        .bottom-nav i.active { color: var(--accent); }
     </style>
 </head>
 <body>
 
-    <!-- Notification Toast -->
-    <div id="toastNotification" class="toast">Link copied to tech clipboard!</div>
-
-    <!-- Profile Edit Modal -->
-    <div id="profileModal" class="modal-overlay">
-        <div class="profile-modal">
-            <div class="modal-title">Edit Profile Matrix</div>
-            <input type="text" id="editUsername" class="modal-input" placeholder="Enter handle (e.g., alex_cyber)">
-            <input type="text" id="editAvatarUrl" class="modal-input" placeholder="Profile Pic Image URL...">
-            <div class="modal-buttons">
-                <button class="modal-btn btn-cancel" onclick="closeProfileModal()">Cancel</button>
-                <button class="modal-btn btn-save" onclick="saveProfileData()">Update</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Facebook Style Profile View Dashboard -->
-    <div id="fbProfileDashboard" class="modal-overlay" style="align-items: flex-end;">
-        <div class="profile-modal" style="max-width: 480px; width: 100%; border-radius: 24px 24px 0 0; padding: 0; overflow-y: auto; max-height: 85vh; text-align: left;">
-            
-            <!-- Cover & Avatar Grid -->
-            <div style="position: relative; height: 160px; background: linear-gradient(135deg, #1e1b4b, #3b1d5c); border-bottom: 1px solid var(--border-color);">
-                <button onclick="closeFbProfile()" style="position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; z-index: 10;"><i class="fa-solid fa-arrow-left"></i></button>
-                
-                <div class="avatar-ring" style="width: 90px; height: 90px; position: absolute; bottom: -35px; left: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
-                    <img id="fbProfileAvatar" src="" class="user-avatar" style="border: 3px solid var(--card-color);">
-                </div>
-            </div>
-
-            <!-- Profile Details -->
-            <div style="padding: 45px 20px 20px 20px;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div>
-                        <h2 id="fbProfileName" style="font-size: 22px; font-weight: 700; color: var(--text-main);"></h2>
-                        <p style="font-size: 13px; color: var(--accent-color); margin-top: 2px;">@matrix_operator</p>
-                    </div>
-                    <button onclick="openProfileModal(); closeFbProfile();" style="background: var(--border-color); color: var(--text-main); border: none; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer;"><i class="fa-regular fa-pen-to-square"></i> Edit Matrix</button>
-                </div>
-                
-                <p style="font-size: 14px; color: var(--text-muted); margin-top: 15px; line-height: 1.4; border-left: 3px solid var(--accent-color); padding-left: 10px;">
-                    Cyber Athlete & Operational Developer. Exploring the boundaries of the grid. 🏏⚡
-                </p>
-
-                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
-
-                <!-- Stats Box -->
-                <div style="display: flex; gap: 30px; margin-bottom: 10px;">
-                    <div><strong id="fbPostCount" style="color: var(--text-main); font-size: 18px;">0</strong> <span style="color: var(--text-muted); font-size: 14px;">Broadcasts</span></div>
-                    <div><strong style="color: var(--text-main); font-size: 18px;">1.2k</strong> <span style="color: var(--text-muted); font-size: 14px;">Nodes</span></div>
-                    <div><strong style="color: var(--text-main); font-size: 18px;">840</strong> <span style="color: var(--text-muted); font-size: 14px;">Signals</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- App Header -->
-    <div class="app-header">
-        <h1>InstaFace</h1>
-        <div class="header-icons">
-            <i class="fa-regular fa-bell" title="Toggle Neon Theme" onclick="toggleTheme()"></i>
-            <i class="fa-regular fa-paper-plane" onclick="triggerShare()"></i>
-        </div>
-    </div>
-
-    <!-- Container Area -->
     <div class="app-container">
-        
-        <!-- Cyber Stories Grid -->
-        <div class="stories-bar">
-            <div class="story-item">
-                <div class="story-ring"><img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150" class="story-img"></div>
-                <span class="story-name">sam_neon</span>
-            </div>
-            <div class="story-item">
-                <div class="story-ring"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" class="story-img"></div>
-                <span class="story-name">lisa_flux</span>
-            </div>
-            <div class="story-item">
-                <div class="story-ring"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" class="story-img"></div>
-                <span class="story-name">alpha_dev</span>
-            </div>
-            <div class="story-item">
-                <div class="story-ring"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150" class="story-img"></div>
-                <span class="story-name">vector_x</span>
+        <!-- Header -->
+        <div class="header">
+            <h2>InstaFace</h2>
+            <div class="header-icons">
+                <i class="fa-solid fa-right-from-bracket" onclick="logout()" title="Logout"></i>
             </div>
         </div>
 
-        <!-- Integrated Search Bar Expandable -->
-        <div id="searchBarContainer" class="search-container">
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted)"></i>
-                <input type="text" id="cyberSearchInput" placeholder="Search operational matrices..." oninput="filterFeed()">
-            </div>
-        </div>
-        
-        <!-- Post Entry Card -->
-        <div class="create-post-box">
-            <div class="input-row">
-                <div class="avatar-ring">
-                    <img id="currentUserAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="user-avatar" alt="User">
+        <!-- Feed Body -->
+        <div class="main-feed">
+            <!-- Stories Bar -->
+            <div class="stories-bar">
+                <div class="story-ring story-add" onclick="document.getElementById('storyInput').click()">
+                    <i class="fa-solid fa-plus"></i>
                 </div>
-                <textarea id="postInputText" placeholder="Share your thoughts or logs..."></textarea>
-            </div>
-            
-            <input type="file" id="postFileInput" accept="image/*" style="display: none;" onchange="previewImage(event)">
-            
-            <div id="imagePreviewContainer" class="image-preview-container">
-                <img id="imagePreview" src="" alt="Selected Image">
-                <button class="remove-preview-btn" onclick="removeSelectedImage()">×</button>
+                <input type="file" id="storyInput" style="display:none" accept="image/*" onchange="uploadStory(event)">
+                <div class="story-ring"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"></div>
+                <div class="story-ring"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150"></div>
             </div>
 
-            <div class="action-row">
-                <div class="photo-btn-label" onclick="document.getElementById('postFileInput').click();">
-                    <i class="fa-regular fa-image"></i> Graphic
-                </div>
-                <button class="submit-post-btn" onclick="addNewPost()">Broadcast</button>
+            <!-- Upload Post/Video Bar -->
+            <div class="upload-section">
+                <input type="text" id="postCaption" placeholder="What's on your cyber mind?">
+                <input type="file" id="mediaInput" style="display:none" accept="image/*,video/*">
+                <button class="upload-btn" onclick="document.getElementById('mediaInput').click()">Media</button>
+                <button class="upload-btn" onclick="addNewPost()">Post</button>
             </div>
-        </div>
 
-        <!-- Dynamic Feed -->
-        <div class="feed-list" id="mainFeed"></div>
-    </div>
-
-    <!-- Bottom Actions Tab -->
-    <div class="bottom-nav">
-        <i class="fa-solid fa-layer-group active-nav" onclick="resetFeedFilter()"></i>
-        <i class="fa-solid fa-magnifying-glass" onclick="toggleSearchBox()"></i>
-        <i class="fa-regular fa-square-plus" onclick="document.getElementById('postFileInput').click();"></i>
-        <i class="fa-regular fa-compass" onclick="triggerShare()"></i>
-        <img id="navUserAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="bottom-nav-avatar" onclick="openFbProfile()">
-    </div>
-
-    <!-- Functional Engine Core -->
-    <script>
-        let selectedImageBase64 = null;
-        let lastTap = 0; // For double tap tracking
-
-        // Load profile configurations
-        let profileConfig = JSON.parse(localStorage.getItem('cyber_profile_data')) || {
-            username: "creative_mind",
-            avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
-        };
-
-        let posts = JSON.parse(localStorage.getItem('instaface_cyber_posts')) || [
-            {
-                id: 1,
-                username: "neon_vector",
-                time: "2 hours ago",
-                text: "Welcome to the rebranded aesthetic. Designed for absolute focus. ⚡🌐",
-                img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600",
-                likes: 42,
-                likedByUser: false,
-                comments: ["This style hits completely different.", "Loving the clean vibe."]
-            }
-        ];
-
-        function syncProfileUI() {
-            document.getElementById('currentUserAvatar').src = profileConfig.avatar;
-            document.getElementById('navUserAvatar').src = profileConfig.avatar;
-        }
-
-        function renderFeed(filterText = "") {
-            const feed = document.getElementById('mainFeed');
-            feed.innerHTML = "";
-
-            let processedPosts = posts;
-            if(filterText) {
-                processedPosts = posts.filter(p => 
-                    p.text.toLowerCase().includes(filterText.toLowerCase()) || 
-                    p.username.toLowerCase().includes(filterText.toLowerCase())
-                );
-            }
-
-            if(processedPosts.length === 0) {
-                feed.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--text-muted)">No matrix records found.</div>`;
-                return;
-            }
-
-            processedPosts.forEach(post => {
-                let imgTag = post.img ? `
-                    <div class="img-container" onclick="detectDoubleTap(event, ${post.id})">
-                        <i class="fa-solid fa-heart double-tap-heart" id="dt-${post.id}"></i>
-                        <img src="${post.img}" class="post-content-img">
-                    </div>` : '';
-                
-                let heartIcon = post.likedByUser ? 'fa-solid fa-heart active-liked' : 'fa-regular fa-heart';
-                
-                // Allow deletion only if the post matches our user
-                let deleteBtn = (post.username === profileConfig.username || post.username === "user_prime" || post.username === "creative_mind") ? 
-                    `<i class="fa-regular fa-trash-can delete-post-btn" onclick="deletePost(${post.id})"></i>` : '';
-
-                let commentItems = "";
-                post.comments.forEach(c => {
-                    commentItems += `<li><strong>operator</strong> ${c}</li>`;
-                });
-
-                const postHTML = `
-                    <div class="post-card" id="post-${post.id}">
-                        <div class="post-card-header">
-                            <div class="header-left">
-                                <div class="avatar-ring" style="width:36px; height:36px;">
-                                    <img src="${post.username === profileConfig.username ? profileConfig.avatar : 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150'}" class="user-avatar">
-                                </div>
-                                <div class="post-user-meta">
-                                    <span class="username">${post.username}</span>
-                                    <span class="time-stamp">${post.time}</span>
-                                </div>
-                            </div>
-                            ${deleteBtn}
-                        </div>
-                        ${imgTag}
-                        <div class="post-action-bar">
-                            <i class="${heartIcon} action-icon" onclick="handleLike(${post.id})"></i>
-                            <i class="fa-regular fa-comment action-icon" onclick="focusCommentField(${post.id})"></i>
-                            <i class="fa-regular fa-share-from-square action-icon" onclick="triggerShare()"></i>
-                        </div>
-                        <div class="likes-display"><span>${post.likes}</span> interactions</div>
-                        <div class="post-content-text">
-                            <strong>${post.username}</strong>${post.text}
-                        </div>
-                        <div class="comments-section">
-                            <ul class="comments-box-list">${commentItems}</ul>
-                            <div class="input-comment-row">
-                                <input type="text" placeholder="Add terminal log..." onkeypress="checkCommentEnter(event, ${post.id}, this)">
-                                <button class="send-comment-btn" onclick="addComment(${post.id}, this)">Send</button>
-                            </div>
-                        </div>
+            <!-- Dynamic Posts Feed -->
+            <div id="feedContainer">
+                <div class="post-card">
+                    <div class="post-header">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150">
+                        <span>neon_vector</span>
                     </div>
-                `;
-                feed.insertAdjacentHTML('beforeend', postHTML);
-            });
+                    <img class="post-image" src="https://assets.mixkit.co/videos/preview/mixkit-neon-light-from-a-tunnel-in-a-futuristic-city-43225-large.jpg">
+                    <div class="post-actions">
+                        <i class="fa-regular fa-heart" onclick="this.classList.toggle('fa-solid'); this.classList.toggle('fa-regular'); this.style.color='#ef4444'"></i>
+                        <i class="fa-regular fa-comment"></i>
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </div>
+                    <div class="post-caption"><b>neon_vector</b> Welcome to the redesigned matrix! ⚡</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <i class="fa-solid fa-layer-group active" onclick="window.location.href='index.html'"></i>
+            <i class="fa-solid fa-video" onclick="window.location.href='reels.html'"></i>
+            <i class="fa-regular fa-compass"></i>
+            <i class="fa-regular fa-user" onclick="window.location.href='login.html'"></i>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            localStorage.removeItem('cyberUser');
+            alert('Logged out successfully!');
+            window.location.href = 'login.html';
         }
 
-        function saveToStorage() {
-            localStorage.setItem('instaface_cyber_posts', JSON.stringify(posts));
-        }
-
-        // Toggle Expandable Search Bar
-        function toggleSearchBox() {
-            const container = document.getElementById('searchBarContainer');
-            container.style.display = (container.style.display === 'block') ? 'none' : 'block';
-            if(container.style.display === 'block') document.getElementById('cyberSearchInput').focus();
-        }
-
-        function filterFeed() {
-            const query = document.getElementById('cyberSearchInput').value;
-            renderFeed(query);
-        }
-
-        function resetFeedFilter() {
-            document.getElementById('cyberSearchInput').value = "";
-            document.getElementById('searchBarContainer').style.display = 'none';
-            renderFeed();
-        }
-
-        // Neon Matrix Theme Switcher
-        function toggleTheme() {
-            document.body.classList.toggle('neon-theme');
-        }
-
-        // Profile Modals Functionality
-        function openProfileModal() {
-            document.getElementById('editUsername').value = profileConfig.username;
-            document.getElementById('editAvatarUrl').value = profileConfig.avatar;
-            document.getElementById('profileModal').classList.add('open');
-        }
-
-        function closeProfileModal() {
-            document.getElementById('profileModal').classList.remove('open');
-        }
-
-        function saveProfileData() {
-            const newName = document.getElementById('editUsername').value.trim();
-            const newUrl = document.getElementById('editAvatarUrl').value.trim();
-            
-            if(newName) profileConfig.username = newName;
-            if(newUrl) profileConfig.avatar = newUrl;
-
-            localStorage.setItem('cyber_profile_data', JSON.stringify(profileConfig));
-            syncProfileUI();
-            closeProfileModal();
-            renderFeed();
-        }
-
-        // Facebook Style Dashboard Handlers
-        function openFbProfile() {
-            document.getElementById('fbProfileAvatar').src = profileConfig.avatar;
-            document.getElementById('fbProfileName').innerText = profileConfig.username;
-            
-            let userPostsCount = posts.filter(p => p.username === profileConfig.username).length;
-            document.getElementById('fbPostCount').innerText = userPostsCount;
-            
-            document.getElementById('fbProfileDashboard').classList.add('open');
-        }
-
-        function closeFbProfile() {
-            document.getElementById('fbProfileDashboard').classList.remove('open');
-        }
-
-        // Double Tap To Like Activation
-        function detectDoubleTap(event, id) {
-            const currentTime = new Date().getTime();
-            const tapLength = currentTime - lastTap;
-            if (tapLength < 300 && tapLength > 0) {
-                const overlayHeart = document.getElementById(`dt-${id}`);
-                if(overlayHeart) {
-                    overlayHeart.classList.add('animate');
-                    setTimeout(() => overlayHeart.classList.remove('animate'), 700);
-                }
-                
-                const post = posts.find(p => p.id === id);
-                if(post && !post.likedByUser) {
-                    post.likes++;
-                    post.likedByUser = true;
-                    saveToStorage();
-                    renderFeed();
-                }
-            }
-            lastTap = currentTime;
-        }
-
-        // Selection Preview File handlers
-        function previewImage(event) {
+        function uploadStory(event) {
             const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    selectedImageBase64 = e.target.result;
-                    document.getElementById('imagePreview').src = selectedImageBase64;
-                    document.getElementById('imagePreviewContainer').style.display = 'block';
-                }
-                reader.readAsDataURL(file);
+            if(file) {
+                alert('Story uploaded successfully!');
             }
-        }
-
-        function removeSelectedImage() {
-            selectedImageBase64 = null;
-            document.getElementById('postFileInput').value = "";
-            document.getElementById('imagePreviewContainer').style.display = 'none';
         }
 
         function addNewPost() {
-            const txt = document.getElementById('postInputText').value.trim();
-            if(!txt && !selectedImageBase64) return;
+            const caption = document.getElementById('postCaption').value;
+            const fileInput = document.getElementById('mediaInput').files[0];
+            
+            if(caption.trim() === "" && !fileInput) {
+                alert('Please write something or select a media file!');
+                return;
+            }
 
-            const newPost = {
-                id: Date.now(),
-                username: profileConfig.username,
-                time: "Just now",
-                text: txt,
-                img: selectedImageBase64 || null,
-                likes: 0,
-                likedByUser: false,
-                comments: []
-            };
-
-            posts.unshift(newPost);
-            saveToStorage();
-            renderFeed();
-
-            document.getElementById('postInputText').value = "";
-            removeSelectedImage();
-        }
-
-        function deletePost(id) {
-            posts = posts.filter(p => p.id !== id);
-            saveToStorage();
-            renderFeed();
-        }
-
-        function handleLike(id) {
-            const post = posts.find(p => p.id === id);
-            if(post) {
-                if(post.likedByUser) {
-                    post.likes--;
-                    post.likedByUser = false;
+            const username = localStorage.getItem('cyberUser') || 'cyber_user';
+            const feed = document.getElementById('feedContainer');
+            
+            let mediaHtml = '';
+            if(fileInput) {
+                const mediaUrl = URL.createObjectURL(fileInput);
+                if(fileInput.type.includes('video')) {
+                    mediaHtml = `<video class="post-image" src="${mediaUrl}" controls autoplay muted></video>`;
                 } else {
-                    post.likes++;
-                    post.likedByUser = true;
+                    mediaHtml = `<img class="post-image" src="${mediaUrl}">`;
                 }
-                saveToStorage();
-                renderFeed();
             }
+
+            const newPostHTML = `
+                <div class="post-card">
+                    <div class="post-header">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150">
+                        <span>${username}</span>
+                    </div>
+                    ${mediaHtml}
+                    <div class="post-actions">
+                        <i class="fa-regular fa-heart" onclick="this.classList.toggle('fa-solid'); this.classList.toggle('fa-regular'); this.style.color='#ef4444'"></i>
+                        <i class="fa-regular fa-comment"></i>
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </div>
+                    <div class="post-caption"><b>${username}</b> ${caption}</div>
+                </div>
+            `;
+
+            feed.insertAdjacentHTML('afterbegin', newPostHTML);
+            document.getElementById('postCaption').value = '';
+            document.getElementById('mediaInput').value = '';
+            alert('Post published successfully!');
         }
-
-        function addComment(id, btn) {
-            const input = btn.previousElementSibling;
-            const text = input.value.trim();
-            if(!text) return;
-
-            const post = posts.find(p => p.id === id);
-            if(post) {
-                post.comments.push(text);
-                saveToStorage();
-                renderFeed();
-            }
-        }
-
-        function checkCommentEnter(e, id, input) {
-            if(e.key === 'Enter') {
-                const btn = input.nextElementSibling;
-                addComment(id, btn);
-            }
-        }
-
-        function focusCommentField(id) {
-            const postEl = document.getElementById(`post-${id}`);
-            postEl.querySelector('.input-comment-row input').focus();
-        }
-
-        function triggerShare() {
-            const toast = document.getElementById('toastNotification');
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 2500);
-        }
-
-        // Initialize App
-        syncProfileUI();
-        renderFeed();
     </script>
 </body>
 </html>
