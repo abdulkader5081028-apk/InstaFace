@@ -12,23 +12,23 @@
         .app-container { width: 100%; max-width: 480px; height: 100vh; background: #000; display: flex; flex-direction: column; position: relative; }
         
         /* Top Header */
-        .header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; border-bottom: 1px solid #1f2937; }
+        .header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; border-bottom: 1px solid #1f2937; flex-shrink: 0; }
         .header h2 { font-size: 22px; font-weight: 800; background: linear-gradient(90deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header-icons i { font-size: 20px; margin-left: 15px; cursor: pointer; }
+        .header-icons i { font-size: 20px; cursor: pointer; color: #f3f4f6; }
 
         /* Main Content Feed */
         .main-feed { flex: 1; overflow-y: auto; padding-bottom: 70px; scrollbar-width: none; }
         .main-feed::-webkit-scrollbar { display: none; }
 
         /* Story Section */
-        .stories-bar { display: flex; gap: 12px; padding: 12px 16px; overflow-x: auto; border-bottom: 1px solid #1f2937; }
+        .stories-bar { display: flex; gap: 12px; padding: 12px 16px; overflow-x: auto; border-bottom: 1px solid #1f2937; flex-shrink: 0; }
         .stories-bar::-webkit-scrollbar { display: none; }
         .story-ring { width: 68px; height: 68px; border-radius: 50%; background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af); padding: 2px; display: flex; flex-direction: column; align-items: center; cursor: pointer; flex-shrink: 0; }
         .story-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #000; }
         .story-add { background: #262626; display: flex; justify-content: center; align-items: center; font-size: 22px; color: #fff; }
 
         /* Upload Box Bar */
-        .upload-section { padding: 12px 16px; border-bottom: 1px solid #1f2937; display: flex; gap: 10px; align-items: center; }
+        .upload-section { padding: 12px 16px; border-bottom: 1px solid #1f2937; display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
         .upload-section input { flex: 1; background: #121212; border: 1px solid #262626; padding: 10px 14px; border-radius: 20px; color: #fff; outline: none; font-size: 13px; }
         .upload-btn { background: #a855f7; color: white; border: none; padding: 8px 14px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 13px; }
 
@@ -42,7 +42,7 @@
         .post-caption { padding: 0 16px 12px 16px; font-size: 13px; color: #d1d5db; }
 
         /* Bottom Nav */
-        .bottom-nav { width: 100%; height: 60px; background: rgba(0,0,0,0.95); border-top: 1px solid #1f2937; position: absolute; bottom: 0; display: flex; justify-content: space-around; align-items: center; z-index: 10; }
+        .bottom-nav { width: 100%; height: 60px; background: rgba(0,0,0,0.95); border-top: 1px solid #1f2937; position: absolute; bottom: 0; left: 0; display: flex; justify-content: space-around; align-items: center; z-index: 10; }
         .bottom-nav i { font-size: 20px; color: #9ca3af; cursor: pointer; }
         .bottom-nav i.active { color: var(--accent); }
     </style>
@@ -96,7 +96,7 @@
             </div>
         </div>
 
-        <!-- Bottom Navigation -->
+        <!-- Bottom Navigation Bar -->
         <div class="bottom-nav">
             <i class="fa-solid fa-layer-group active" onclick="window.location.href='index.html'"></i>
             <i class="fa-solid fa-video" onclick="window.location.href='reels.html'"></i>
