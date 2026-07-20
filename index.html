@@ -3,10 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>InstaFace Cyber</title>
+    <title>InstaFace Cyber Pro</title>
     <!-- FontAwesome Elements for Clean Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --bg-color: #08090a;
+            --card-color: #111317;
+            --border-color: #1f2937;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --primary-glow: linear-gradient(90deg, #6366f1, #a855f7);
+            --accent-color: #a855f7;
+        }
+
+        /* Neon Theme */
+        .neon-theme {
+            --bg-color: #0c0714;
+            --card-color: #170f26;
+            --border-color: #3b1d5c;
+            --text-main: #ffffff;
+            --text-muted: #c0a9df;
+            --primary-glow: linear-gradient(90deg, #ec4899, #a855f7);
+            --accent-color: #ec4899;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -16,13 +37,14 @@
         }
 
         body {
-            background-color: #08090a;
-            color: #f3f4f6;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
             padding-bottom: 80px;
+            transition: all 0.3s ease;
         }
 
         /* Premium Floating Toast */
@@ -54,10 +76,10 @@
             width: 100%;
             max-width: 480px;
             height: 60px;
-            background-color: rgba(8, 9, 10, 0.8);
+            background-color: var(--bg-color);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid #1f2937;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -71,7 +93,7 @@
             font-size: 22px;
             font-weight: 800;
             letter-spacing: -1px;
-            background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+            background: var(--primary-glow);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -83,14 +105,13 @@
 
         .header-icons i {
             font-size: 20px;
-            color: #9ca3af;
+            color: var(--text-muted);
             cursor: pointer;
-            transition: color 0.2s, transform 0.2s;
+            transition: color 0.2s;
         }
         
         .header-icons i:hover {
-            color: #a855f7;
-            transform: translateY(-1px);
+            color: var(--accent-color);
         }
 
         /* Container */
@@ -100,10 +121,54 @@
             padding: 12px;
         }
 
+        /* Cyber Stories Section */
+        .stories-bar {
+            display: flex;
+            gap: 14px;
+            overflow-x: auto;
+            padding: 8px 4px 16px 4px;
+            width: 100%;
+        }
+        .stories-bar::-webkit-scrollbar { display: none; }
+
+        .story-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            min-width: 68px;
+            cursor: pointer;
+        }
+
+        .story-ring {
+            padding: 2px;
+            background: var(--primary-glow);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+        }
+
+        .story-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--bg-color);
+        }
+
+        .story-name {
+            font-size: 11px;
+            color: var(--text-muted);
+            max-width: 65px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
         /* Clean Card UI for Post Box */
         .create-post-box {
-            background: #111317;
-            border: 1px solid #1f2937;
+            background: var(--card-color);
+            border: 1px solid var(--border-color);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 20px;
@@ -118,7 +183,7 @@
 
         .avatar-ring {
             padding: 2px;
-            background: linear-gradient(135deg, #6366f1, #a855f7);
+            background: var(--primary-glow);
             border-radius: 50%;
             width: 44px;
             height: 44px;
@@ -129,7 +194,7 @@
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #111317;
+            border: 2px solid var(--card-color);
         }
 
         .create-post-box textarea {
@@ -140,7 +205,7 @@
             font-size: 15px;
             outline: none;
             padding-top: 6px;
-            color: #f3f4f6;
+            color: var(--text-main);
             line-height: 1.5;
         }
 
@@ -148,7 +213,6 @@
             color: #4b5563;
         }
 
-        /* Preview container for selected image */
         .image-preview-container {
             width: 100%;
             margin-bottom: 16px;
@@ -156,7 +220,7 @@
             position: relative;
             border-radius: 12px;
             overflow: hidden;
-            border: 1px solid #374151;
+            border: 1px solid var(--border-color);
         }
 
         .image-preview-container img {
@@ -180,7 +244,6 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 12px;
         }
 
         .action-row {
@@ -190,7 +253,7 @@
         }
 
         .photo-btn-label {
-            color: #9ca3af;
+            color: var(--text-muted);
             font-size: 13px;
             cursor: pointer;
             display: flex;
@@ -199,17 +262,11 @@
             font-weight: 500;
             padding: 8px 14px;
             border-radius: 30px;
-            background-color: #1f2937;
-            transition: all 0.2s;
-        }
-
-        .photo-btn-label:hover {
-            background-color: #374151;
-            color: #ffffff;
+            background-color: var(--bg-color);
         }
 
         .submit-post-btn {
-            background: linear-gradient(90deg, #6366f1, #a855f7);
+            background: var(--primary-glow);
             color: white;
             border: none;
             padding: 8px 24px;
@@ -217,13 +274,6 @@
             font-weight: 600;
             font-size: 13px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
-            transition: all 0.2s;
-        }
-
-        .submit-post-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(168, 85, 247, 0.4);
         }
 
         /* Feed Elements */
@@ -234,17 +284,22 @@
         }
 
         .post-card {
-            background: #111317;
-            border: 1px solid #1f2937;
+            background: var(--card-color);
+            border: 1px solid var(--border-color);
             border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
 
         .post-card-header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             padding: 16px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
         }
 
         .post-user-meta {
@@ -256,20 +311,30 @@
         .username {
             font-weight: 600;
             font-size: 14px;
-            color: #f3f4f6;
+            color: var(--text-main);
         }
 
         .time-stamp {
             font-size: 11px;
-            color: #6b7280;
+            color: var(--text-muted);
             margin-top: 1px;
         }
+
+        .delete-post-btn {
+            color: #ef4444;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .delete-post-btn:hover { opacity: 1; }
 
         .img-container {
             position: relative;
             width: 100%;
             overflow: hidden;
             background: #08090a;
+            user-select: none;
         }
 
         .post-content-img {
@@ -277,6 +342,30 @@
             max-height: 440px;
             object-fit: cover;
             display: block;
+        }
+
+        /* Double Tap Heart Animation overlay */
+        .double-tap-heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 80px;
+            color: #ef4444;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 10;
+            text-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+        }
+        .double-tap-heart.animate {
+            animation: heartFadePop 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes heartFadePop {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            30% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            80% { transform: translate(-50%, -50%) scale(0.9); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
         }
 
         /* Custom Modern Action Panel */
@@ -288,25 +377,18 @@
 
         .action-icon {
             font-size: 22px;
-            color: #9ca3af;
+            color: var(--text-muted);
             cursor: pointer;
-            transition: transform 0.15s ease, color 0.15s ease;
-        }
-
-        .action-icon:hover {
-            color: #f3f4f6;
-            transform: scale(1.05);
         }
 
         .fa-heart.active-liked {
             color: #ef4444;
-            animation: cyberHeart 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: cyberHeart 0.4s ease;
         }
 
         @keyframes cyberHeart {
             0% { transform: scale(1); }
-            40% { transform: scale(1.35); }
-            70% { transform: scale(0.9); }
+            50% { transform: scale(1.3); }
             100% { transform: scale(1); }
         }
 
@@ -314,26 +396,26 @@
             padding: 4px 16px;
             font-size: 13px;
             font-weight: 600;
-            color: #d1d5db;
+            color: var(--text-main);
         }
 
         .post-content-text {
             padding: 4px 16px 16px 16px;
             font-size: 14px;
-            color: #9ca3af;
+            color: var(--text-muted);
             line-height: 1.5;
-            border-bottom: 1px solid #1f2937;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .post-content-text strong {
             margin-right: 8px;
-            color: #ffffff;
+            color: var(--text-main);
         }
 
         /* Techy Comments Section */
         .comments-section {
             padding: 12px 16px 16px 16px;
-            background: #14171c;
+            background: rgba(0,0,0,0.15);
         }
 
         .comments-box-list {
@@ -346,11 +428,11 @@
 
         .comments-box-list li {
             margin-bottom: 6px;
-            color: #9ca3af;
+            color: var(--text-muted);
         }
 
         .comments-box-list strong {
-            color: #e5e7eb;
+            color: var(--text-main);
             margin-right: 6px;
         }
 
@@ -358,8 +440,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background-color: #1b1e24;
-            border: 1px solid #2d3748;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
             border-radius: 14px;
             padding: 6px 14px;
         }
@@ -370,26 +452,16 @@
             border: none;
             outline: none;
             font-size: 13px;
-            color: #ffffff;
-        }
-
-        .input-comment-row input::placeholder {
-            color: #4b5563;
+            color: white;
         }
 
         .send-comment-btn {
             background: transparent;
             border: none;
-            color: #a855f7;
+            color: var(--accent-color);
             font-weight: 600;
             font-size: 13px;
             cursor: pointer;
-            padding-left: 8px;
-            transition: color 0.2s;
-        }
-
-        .send-comment-btn:hover {
-            color: #6366f1;
         }
 
         /* Futuristic Bottom Navbar */
@@ -397,9 +469,9 @@
             width: 100%;
             max-width: 480px;
             height: 60px;
-            background-color: rgba(11, 13, 17, 0.9);
+            background-color: var(--card-color);
             backdrop-filter: blur(15px);
-            border-top: 1px solid #1f2937;
+            border-top: 1px solid var(--border-color);
             position: fixed;
             bottom: 0;
             display: flex;
@@ -410,14 +482,12 @@
 
         .bottom-nav i {
             font-size: 20px;
-            color: #6b7280;
+            color: var(--text-muted);
             cursor: pointer;
-            transition: all 0.2s;
         }
         
         .bottom-nav i:hover, .bottom-nav i.active-nav {
-            color: #a855f7;
-            transform: scale(1.1);
+            color: var(--accent-color);
         }
 
         .bottom-nav-avatar {
@@ -425,9 +495,99 @@
             height: 26px;
             border-radius: 50%;
             object-fit: cover;
-            border: 1px solid #6b7280;
+            border: 1px solid var(--text-muted);
             cursor: pointer;
         }
+
+        /* Interactive Search Drawer */
+        .search-container {
+            width: 100%;
+            margin-bottom: 16px;
+            background: var(--card-color);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 16px;
+            display: none;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 30px;
+        }
+
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 14px;
+            margin-left: 8px;
+        }
+
+        /* Profile & Edit Modal Layout */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20000;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+        .profile-modal {
+            background: var(--card-color);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 360px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: var(--primary-glow);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-input {
+            width: 100%;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 12px;
+            color: white;
+            margin-bottom: 16px;
+            outline: none;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-save { background: var(--primary-glow); color: white; }
+        .btn-cancel { background: #374151; color: var(--text-main); }
     </style>
 </head>
 <body>
@@ -435,31 +595,70 @@
     <!-- Notification Toast -->
     <div id="toastNotification" class="toast">Link copied to tech clipboard!</div>
 
+    <!-- Profile Edit Modal -->
+    <div id="profileModal" class="modal-overlay">
+        <div class="profile-modal">
+            <div class="modal-title">Edit Profile Matrix</div>
+            <input type="text" id="editUsername" class="modal-input" placeholder="Enter handle (e.g., alex_cyber)">
+            <input type="text" id="editAvatarUrl" class="modal-input" placeholder="Profile Pic Image URL...">
+            <div class="modal-buttons">
+                <button class="modal-btn btn-cancel" onclick="closeProfileModal()">Cancel</button>
+                <button class="modal-btn btn-save" onclick="saveProfileData()">Update</button>
+            </div>
+        </div>
+    </div>
+
     <!-- App Header -->
     <div class="app-header">
         <h1>InstaFace</h1>
         <div class="header-icons">
-            <i class="fa-regular fa-bell"></i>
-            <i class="fa-regular fa-paper-plane"></i>
+            <i class="fa-regular fa-bell" title="Toggle Neon Theme" onclick="toggleTheme()"></i>
+            <i class="fa-regular fa-paper-plane" onclick="triggerShare()"></i>
         </div>
     </div>
 
     <!-- Container Area -->
     <div class="app-container">
         
+        <!-- Cyber Stories Grid -->
+        <div class="stories-bar">
+            <div class="story-item">
+                <div class="story-ring"><img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150" class="story-img"></div>
+                <span class="story-name">sam_neon</span>
+            </div>
+            <div class="story-item">
+                <div class="story-ring"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" class="story-img"></div>
+                <span class="story-name">lisa_flux</span>
+            </div>
+            <div class="story-item">
+                <div class="story-ring"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" class="story-img"></div>
+                <span class="story-name">alpha_dev</span>
+            </div>
+            <div class="story-item">
+                <div class="story-ring"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150" class="story-img"></div>
+                <span class="story-name">vector_x</span>
+            </div>
+        </div>
+
+        <!-- Integrated Search Bar Expandable -->
+        <div id="searchBarContainer" class="search-container">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted)"></i>
+                <input type="text" id="cyberSearchInput" placeholder="Search operational matrices..." oninput="filterFeed()">
+            </div>
+        </div>
+        
         <!-- Post Entry Card -->
         <div class="create-post-box">
             <div class="input-row">
                 <div class="avatar-ring">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="user-avatar" alt="User">
+                    <img id="currentUserAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="user-avatar" alt="User">
                 </div>
                 <textarea id="postInputText" placeholder="Share your thoughts or logs..."></textarea>
             </div>
             
-            <!-- Hidden File Input for Gallery Selection -->
             <input type="file" id="postFileInput" accept="image/*" style="display: none;" onchange="previewImage(event)">
             
-            <!-- Image Preview Box -->
             <div id="imagePreviewContainer" class="image-preview-container">
                 <img id="imagePreview" src="" alt="Selected Image">
                 <button class="remove-preview-btn" onclick="removeSelectedImage()">×</button>
@@ -479,17 +678,23 @@
 
     <!-- Bottom Actions Tab -->
     <div class="bottom-nav">
-        <i class="fa-solid fa-layer-group active-nav"></i>
-        <i class="fa-solid fa-terminal"></i>
+        <i class="fa-solid fa-layer-group active-nav" onclick="resetFeedFilter()"></i>
+        <i class="fa-solid fa-magnifying-glass" onclick="toggleSearchBox()"></i>
         <i class="fa-regular fa-square-plus" onclick="document.getElementById('postFileInput').click();"></i>
-        <i class="fa-regular fa-compass"></i>
-        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="bottom-nav-avatar">
+        <i class="fa-regular fa-compass" onclick="triggerShare()"></i>
+        <img id="navUserAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="bottom-nav-avatar" onclick="openProfileModal()">
     </div>
 
     <!-- Functional Engine Core -->
     <script>
-        // Global variable to store selected image base64
         let selectedImageBase64 = null;
+        let lastTap = 0; // For double tap tracking
+
+        // Load profile configurations
+        let profileConfig = JSON.parse(localStorage.getItem('cyber_profile_data')) || {
+            username: "creative_mind",
+            avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
+        };
 
         let posts = JSON.parse(localStorage.getItem('instaface_cyber_posts')) || [
             {
@@ -504,14 +709,41 @@
             }
         ];
 
-        function renderFeed() {
+        function syncProfileUI() {
+            document.getElementById('currentUserAvatar').src = profileConfig.avatar;
+            document.getElementById('navUserAvatar').src = profileConfig.avatar;
+        }
+
+        function renderFeed(filterText = "") {
             const feed = document.getElementById('mainFeed');
             feed.innerHTML = "";
 
-            posts.forEach(post => {
-                let imgTag = post.img ? `<div class="img-container"><img src="${post.img}" class="post-content-img" ondblclick="handleLike(${post.id})"></div>` : '';
+            let processedPosts = posts;
+            if(filterText) {
+                processedPosts = posts.filter(p => 
+                    p.text.toLowerCase().includes(filterText.toLowerCase()) || 
+                    p.username.toLowerCase().includes(filterText.toLowerCase())
+                );
+            }
+
+            if(processedPosts.length === 0) {
+                feed.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--text-muted)">No matrix records found.</div>`;
+                return;
+            }
+
+            processedPosts.forEach(post => {
+                let imgTag = post.img ? `
+                    <div class="img-container" onclick="detectDoubleTap(event, ${post.id})">
+                        <i class="fa-solid fa-heart double-tap-heart" id="dt-${post.id}"></i>
+                        <img src="${post.img}" class="post-content-img">
+                    </div>` : '';
+                
                 let heartIcon = post.likedByUser ? 'fa-solid fa-heart active-liked' : 'fa-regular fa-heart';
                 
+                // Allow deletion only if the post matches our user
+                let deleteBtn = (post.username === profileConfig.username || post.username === "user_prime" || post.username === "creative_mind") ? 
+                    `<i class="fa-regular fa-trash-can delete-post-btn" onclick="deletePost(${post.id})"></i>` : '';
+
                 let commentItems = "";
                 post.comments.forEach(c => {
                     commentItems += `<li><strong>operator</strong> ${c}</li>`;
@@ -520,13 +752,16 @@
                 const postHTML = `
                     <div class="post-card" id="post-${post.id}">
                         <div class="post-card-header">
-                            <div class="avatar-ring" style="width:36px; height:36px;">
-                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="user-avatar">
+                            <div class="header-left">
+                                <div class="avatar-ring" style="width:36px; height:36px;">
+                                    <img src="${post.username === profileConfig.username ? profileConfig.avatar : 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150'}" class="user-avatar">
+                                </div>
+                                <div class="post-user-meta">
+                                    <span class="username">${post.username}</span>
+                                    <span class="time-stamp">${post.time}</span>
+                                </div>
                             </div>
-                            <div class="post-user-meta">
-                                <span class="username">${post.username}</span>
-                                <span class="time-stamp">${post.time}</span>
-                            </div>
+                            ${deleteBtn}
                         </div>
                         ${imgTag}
                         <div class="post-action-bar">
@@ -555,7 +790,78 @@
             localStorage.setItem('instaface_cyber_posts', JSON.stringify(posts));
         }
 
-        // Image Selection Preview handler
+        // Toggle Expandable Search Bar
+        function toggleSearchBox() {
+            const container = document.getElementById('searchBarContainer');
+            container.style.display = (container.style.display === 'block') ? 'none' : 'block';
+            if(container.style.display === 'block') document.getElementById('cyberSearchInput').focus();
+        }
+
+        function filterFeed() {
+            const query = document.getElementById('cyberSearchInput').value;
+            renderFeed(query);
+        }
+
+        function resetFeedFilter() {
+            document.getElementById('cyberSearchInput').value = "";
+            document.getElementById('searchBarContainer').style.display = 'none';
+            renderFeed();
+        }
+
+        // Neon Matrix Theme Switcher
+        function toggleTheme() {
+            document.body.classList.toggle('neon-theme');
+        }
+
+        // Profile Modals Functionality
+        function openProfileModal() {
+            document.getElementById('editUsername').value = profileConfig.username;
+            document.getElementById('editAvatarUrl').value = profileConfig.avatar;
+            document.getElementById('profileModal').classList.add('open');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.remove('open');
+        }
+
+        function saveProfileData() {
+            const newName = document.getElementById('editUsername').value.trim();
+            const newUrl = document.getElementById('editAvatarUrl').value.trim();
+            
+            if(newName) profileConfig.username = newName;
+            if(newUrl) profileConfig.avatar = newUrl;
+
+            localStorage.setItem('cyber_profile_data', JSON.stringify(profileConfig));
+            syncProfileUI();
+            closeProfileModal();
+            renderFeed();
+        }
+
+        // Double Tap To Like Activation
+        function detectDoubleTap(event, id) {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            if (tapLength < 300 && tapLength > 0) {
+                // Heart graphic popup trigger
+                const overlayHeart = document.getElementById(`dt-${id}`);
+                if(overlayHeart) {
+                    overlayHeart.classList.add('animate');
+                    setTimeout(() => overlayHeart.classList.remove('animate'), 700);
+                }
+                
+                // Force operational like
+                const post = posts.find(p => p.id === id);
+                if(post && !post.likedByUser) {
+                    post.likes++;
+                    post.likedByUser = true;
+                    saveToStorage();
+                    renderFeed();
+                }
+            }
+            lastTap = currentTime;
+        }
+
+        // Selection Preview File handlers
         function previewImage(event) {
             const file = event.target.files[0];
             if (file) {
@@ -577,12 +883,11 @@
 
         function addNewPost() {
             const txt = document.getElementById('postInputText').value.trim();
-
             if(!txt && !selectedImageBase64) return;
 
             const newPost = {
                 id: Date.now(),
-                username: "creative_mind",
+                username: profileConfig.username,
                 time: "Just now",
                 text: txt,
                 img: selectedImageBase64 || null,
@@ -595,9 +900,14 @@
             saveToStorage();
             renderFeed();
 
-            // Clear box
             document.getElementById('postInputText').value = "";
             removeSelectedImage();
+        }
+
+        function deletePost(id) {
+            posts = posts.filter(p => p.id !== id);
+            saveToStorage();
+            renderFeed();
         }
 
         function handleLike(id) {
@@ -646,6 +956,8 @@
             setTimeout(() => { toast.style.display = 'none'; }, 2500);
         }
 
+        // Initialize App
+        syncProfileUI();
         renderFeed();
     </script>
 </body>
