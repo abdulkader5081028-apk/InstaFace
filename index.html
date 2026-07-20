@@ -148,22 +148,39 @@
             color: #4b5563;
         }
 
-        .url-input-field {
+        /* Preview container for selected image */
+        .image-preview-container {
             width: 100%;
-            border: 1px solid #374151;
-            border-radius: 12px;
-            padding: 10px 16px;
-            font-size: 13px;
-            outline: none;
-            background-color: #1f2937;
-            color: #ffffff;
             margin-bottom: 16px;
             display: none;
-            transition: border-color 0.3s;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #374151;
         }
-        
-        .url-input-field:focus {
-            border-color: #a855f7;
+
+        .image-preview-container img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .remove-preview-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
         }
 
         .action-row {
@@ -438,9 +455,18 @@
                 </div>
                 <textarea id="postInputText" placeholder="Share your thoughts or logs..."></textarea>
             </div>
-            <input type="text" id="postImgUrl" class="url-input-field" placeholder="Feed Image URL here...">
+            
+            <!-- Hidden File Input for Gallery Selection -->
+            <input type="file" id="postFileInput" accept="image/*" style="display: none;" onchange="previewImage(event)">
+            
+            <!-- Image Preview Box -->
+            <div id="imagePreviewContainer" class="image-preview-container">
+                <img id="imagePreview" src="" alt="Selected Image">
+                <button class="remove-preview-btn" onclick="removeSelectedImage()">×</button>
+            </div>
+
             <div class="action-row">
-                <div class="photo-btn-label" onclick="toggleUrlInput()">
+                <div class="photo-btn-label" onclick="document.getElementById('postFileInput').click();">
                     <i class="fa-regular fa-image"></i> Graphic
                 </div>
                 <button class="submit-post-btn" onclick="addNewPost()">Broadcast</button>
@@ -455,13 +481,16 @@
     <div class="bottom-nav">
         <i class="fa-solid fa-layer-group active-nav"></i>
         <i class="fa-solid fa-terminal"></i>
-        <i class="fa-regular fa-square-plus" onclick="document.getElementById('postInputText').focus(); toggleUrlInput();"></i>
+        <i class="fa-regular fa-square-plus" onclick="document.getElementById('postFileInput').click();"></i>
         <i class="fa-regular fa-compass"></i>
         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="bottom-nav-avatar">
     </div>
 
     <!-- Functional Engine Core -->
     <script>
+        // Global variable to store selected image base64
+        let selectedImageBase64 = null;
+
         let posts = JSON.parse(localStorage.getItem('instaface_cyber_posts')) || [
             {
                 id: 1,
@@ -526,23 +555,37 @@
             localStorage.setItem('instaface_cyber_posts', JSON.stringify(posts));
         }
 
-        function toggleUrlInput() {
-            const imgField = document.getElementById('postImgUrl');
-            imgField.style.display = (imgField.style.display === 'block') ? 'none' : 'block';
+        // Image Selection Preview handler
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedImageBase64 = e.target.result;
+                    document.getElementById('imagePreview').src = selectedImageBase64;
+                    document.getElementById('imagePreviewContainer').style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeSelectedImage() {
+            selectedImageBase64 = null;
+            document.getElementById('postFileInput').value = "";
+            document.getElementById('imagePreviewContainer').style.display = 'none';
         }
 
         function addNewPost() {
             const txt = document.getElementById('postInputText').value.trim();
-            const url = document.getElementById('postImgUrl').value.trim();
 
-            if(!txt && !url) return;
+            if(!txt && !selectedImageBase64) return;
 
             const newPost = {
                 id: Date.now(),
-                username: "user_prime",
+                username: "creative_mind",
                 time: "Just now",
                 text: txt,
-                img: url || null,
+                img: selectedImageBase64 || null,
                 likes: 0,
                 likedByUser: false,
                 comments: []
@@ -552,9 +595,9 @@
             saveToStorage();
             renderFeed();
 
+            // Clear box
             document.getElementById('postInputText').value = "";
-            document.getElementById('postImgUrl').value = "";
-            document.getElementById('postImgUrl').style.display = 'none';
+            removeSelectedImage();
         }
 
         function handleLike(id) {
