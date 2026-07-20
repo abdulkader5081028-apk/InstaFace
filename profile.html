@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>InstaFace • Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg-color: #000; --text-main: #f3f4f6; --accent: #a855f7; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; height: 100vh; overflow: hidden; }
+        .app-container { width: 100%; max-width: 480px; height: 100vh; background: #000; display: flex; flex-direction: column; position: relative; }
+        
+        /* Header */
+        .header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; border-bottom: 1px solid #1f2937; flex-shrink: 0; }
+        .header h2 { font-size: 18px; font-weight: 700; }
+        
+        /* Profile Info */
+        .profile-body { flex: 1; overflow-y: auto; padding-bottom: 70px; }
+        .profile-info { display: flex; align-items: center; padding: 20px 16px; gap: 20px; }
+        .profile-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .profile-details h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+        .profile-details p { font-size: 13px; color: #9ca3af; }
+        
+        .profile-stats { display: flex; justify-content: space-around; padding: 10px 16px; border-top: 1px solid #1f2937; border-bottom: 1px solid #1f2937; text-align: center; }
+        .stat-box h4 { font-size: 16px; font-weight: 700; }
+        .stat-box span { font-size: 12px; color: #9ca3af; }
+
+        .profile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; }
+        .grid-item { aspect-ratio: 1; background: #121212; display: flex; justify-content: center; align-items: center; color: #555; font-size: 12px; }
+
+        /* Bottom Nav */
+        .bottom-nav { width: 100%; height: 60px; background: rgba(0,0,0,0.95); border-top: 1px solid #1f2937; position: absolute; bottom: 0; left: 0; display: flex; justify-content: space-around; align-items: center; z-index: 10; }
+        .bottom-nav i { font-size: 20px; color: #9ca3af; cursor: pointer; }
+        .bottom-nav i.active { color: var(--accent); }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <h2 id="navUsername">cyber_agent</h2>
+            <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor: pointer; font-size: 18px;"></i>
+        </div>
+
+        <!-- Profile Content -->
+        <div class="profile-body">
+            <div class="profile-info">
+                <img class="profile-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Avatar">
+                <div class="profile-details">
+                    <h3 id="profileName">Cyber User</h3>
+                    <p>Exploring the cyber matrix ⚡🌐</p>
+                </div>
+            </div>
+
+            <div class="profile-stats">
+                <div class="stat-box">
+                    <h4>1</h4>
+                    <span>Posts</span>
+                </div>
+                <div class="stat-box">
+                    <h4>1.2k</h4>
+                    <span>Followers</span>
+                </div>
+                <div class="stat-box">
+                    <h4>180</h4>
+                    <span>Following</span>
+                </div>
+            </div>
+
+            <div class="profile-grid">
+                <div class="grid-item"><i class="fa-solid fa-bolt"></i></div>
+                <div class="grid-item"></div>
+                <div class="grid-item"></div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation Bar -->
+        <div class="bottom-nav">
+            <i class="fa-solid fa-layer-group" onclick="window.location.href='index.html'"></i>
+            <i class="fa-solid fa-video" onclick="window.location.href='reels.html'"></i>
+            <i class="fa-regular fa-compass"></i>
+            <i class="fa-solid fa-user active" onclick="window.location.href='profile.html'"></i>
+        </div>
+    </div>
+
+    <script>
+        // Set dynamic logged-in user info
+        const currentUser = localStorage.getItem('cyberUser') || 'cyber_agent';
+        document.getElementById('navUsername').innerText = currentUser;
+        document.getElementById('profileName').innerText = currentUser;
+
+        function logout() {
+            localStorage.removeItem('cyberUser');
+            alert('Logged out successfully!');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
