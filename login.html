@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Instagram • Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 380px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Instagram Logo Text Style */
+        .insta-logo {
+            font-family: 'Billabong', cursive, sans-serif; /* fallback */
+            font-size: 45px;
+            font-weight: 500;
+            margin-bottom: 35px;
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af, #515bd4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .input-box {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 12px 14px;
+            background: #121212;
+            border: 1px solid #262626;
+            border-radius: 5px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .input-box input:focus {
+            border-color: #a855f7;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #0095f6;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            margin-bottom: 20px;
+        }
+
+        .login-btn:active {
+            opacity: 0.7;
+        }
+
+        .forgot-pass {
+            font-size: 12px;
+            color: #a8a8a8;
+            text-decoration: none;
+            margin-bottom: 40px;
+        }
+
+        .forgot-pass:hover {
+            color: #ffffff;
+        }
+
+        .signup-box {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            max-width: 380px;
+            border-top: 1px solid #262626;
+            padding-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            color: #a8a8a8;
+        }
+
+        .signup-box span {
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <!-- Logo -->
+        <div class="insta-logo">Instagram</div>
+
+        <!-- Form Fields -->
+        <div class="input-box">
+            <input type="text" id="username" placeholder="Phone number, username, or email">
+        </div>
+        <div class="input-box">
+            <input type="password" id="password" placeholder="Password">
+        </div>
+
+        <button class="login-btn" onclick="handleLogin()">Log in</button>
+
+        <a href="#" class="forgot-pass" onclick="alert('Password reset link sent!')">Forgot password?</a>
+    </div>
+
+    <!-- Bottom Sign up switcher -->
+    <div class="signup-box">
+        Don't have an account? <span onclick="handleSignup()">Sign up.</span>
+    </div>
+
+    <script>
+        function handleLogin() {
+            const user = document.getElementById('username').value;
+            if(user.trim() === "") {
+                alert('Please enter your username or email');
+            } else {
+                alert('Login successful! Redirecting to feed...');
+                window.location.href = 'index.html';
+            }
+        }
+
+        function handleSignup() {
+            alert('Redirecting to sign up registration matrix...');
+            // চাইলে এখানে নতুন অ্যাকাউন্ট খোলার পেজে রিডাইরেক্ট করতে পারেন
+        }
+    </script>
+</body>
+</html>
