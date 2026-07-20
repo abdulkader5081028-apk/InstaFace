@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Social Fusion</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent; /* Mobile touch splash remove */
+        }
+
+        body {
+            background-color: #f7f9fa;
+            color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding-bottom: 60px; /* Space for bottom navigation bar */
+        }
+
+        /* Top Header (App Bar Layout) */
+        .app-header {
+            width: 100%;
+            max-width: 500px;
+            height: 55px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e6ecf0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .app-header h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1da1f2;
+            letter-spacing: -0.5px;
+        }
+
+        .app-header i {
+            font-size: 20px;
+            color: #5b7083;
+            cursor: pointer;
+        }
+
+        /* Main Feed Container */
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px;
+        }
+
+        /* Create Post Box */
+        .create-post-box {
+            background-color: #ffffff;
+            border: 1px solid #e6ecf0;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .input-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #e1e8ed;
+        }
+
+        .create-post-box textarea {
+            flex: 1;
+            border: none;
+            resize: none;
+            font-size: 16px;
+            outline: none;
+            padding-top: 8px;
+            color: #0f1419;
+        }
+
+        .url-input-field {
+            width: 100%;
+            border: 1px solid #e6ecf0;
+            border-radius: 99px;
+            padding: 6px 16px;
+            font-size: 13px;
+            outline: none;
+            background-color: #f7f9fa;
+            margin-bottom: 12px;
+            display: none; /* Hidden by default, toggles on click */
+        }
+
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #f7f9fa;
+            padding-top: 12px;
+        }
+
+        .photo-btn-label {
+            color: #1da1f2;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+        }
+
+        .submit-post-btn {
+            background-color: #1da1f2;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 99px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .submit-post-btn:hover {
+            background-color: #1a91da;
+        }
+
+        /* Feed Posts */
+        .feed-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .post-card {
+            background-color: #ffffff;
+            border: 1px solid #e6ecf0;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .post-card-header {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+        }
+
+        .post-user-meta {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+        }
+
+        .username {
+            font-weight: bold;
+            font-size: 15px;
+            color: #0f1419;
+        }
+
+        .time-stamp {
+            font-size: 12px;
+            color: #5b7083;
+        }
+
+        .post-content-text {
+            padding: 0 16px 12px 16px;
+            font-size: 15px;
+            color: #0f1419;
+            line-height: 1.4;
+        }
+
+        .post-content-img {
+            width: 100%;
+            max-height: 380px;
+            object-fit: cover;
+            display: block;
+            border-top: 1px solid #f7f9fa;
+            border-bottom: 1px solid #f7f9fa;
+        }
+
+        /* Post Actions (Like, Comment) */
+        .post-action-bar {
+            display: flex;
+            gap: 24px;
+            padding: 12px 16px;
+            border-bottom: 1px solid #f7f9fa;
+        }
+
+        .action-icon {
+            font-size: 18px;
+            color: #5b7083;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .fa-heart.active-liked {
+            color: #e0245e;
+            animation: pop 0.2s ease-in-out;
+        }
+
+        @keyframes pop {
+            50% { transform: scale(1.2); }
+        }
+
+        .likes-display {
+            padding: 8px 16px 4px 16px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #0f1419;
+        }
+
+        /* Comments Area */
+        .comments-section {
+            padding: 4px 16px 12px 16px;
+        }
+
+        .comments-box-list {
+            list-style: none;
+            max-height: 90px;
+            overflow-y: auto;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .comments-box-list li {
+            margin-bottom: 4px;
+            color: #0f1419;
+        }
+
+        .comments-box-list strong {
+            color: #0f1419;
+            margin-right: 4px;
+        }
+
+        .input-comment-row {
+            display: flex;
+            align-items: center;
+            background-color: #f7f9fa;
+            border-radius: 99px;
+            padding: 6px 12px;
+        }
+
+        .input-comment-row input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 13px;
+            color: #0f1419;
+        }
+
+        .send-comment-btn {
+            background: transparent;
+            border: none;
+            color: #1da1f2;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        /* Bottom Mobile Navigation (Pure App Vibe) */
+        .bottom-nav {
+            width: 100%;
+            max-width: 500px;
+            height: 55px;
+            background-color: #ffffff;
+            border-top: 1px solid #e6ecf0;
+            position: fixed;
+            bottom: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .bottom-nav i {
+            font-size: 20px;
+            color: #5b7083;
+            cursor: pointer;
+        }
+
+        .bottom-nav i.active-nav {
+            color: #1da1f2;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- App Top Bar -->
+    <div class="app-header">
+        <h1>Feed</h1>
+        <i class="fa-regular fa-bell"></i>
+    </div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+        
+        <!-- Create Post -->
+        <div class="create-post-box">
+            <div class="input-row">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="user-avatar" alt="User">
+                <textarea id="postInputText" placeholder="Share something new..."></textarea>
+            </div>
+            <input type="text" id="postImgUrl" class="url-input-field" placeholder="Paste Image URL here...">
+            <div class="action-row">
+                <div class="photo-btn-label" onclick="toggleUrlInput()">
+                    <i class="fa-regular fa-image"></i> Add Photo
+                </div>
+                <button class="submit-post-btn" onclick="addNewPost()">Post</button>
+            </div>
+        </div>
+
+        <!-- Feed List -->
+        <div class="feed-list" id="mainFeed">
+            
+            <!-- Default Sample Post -->
+            <div class="post-card">
+                <div class="post-card-header">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="user-avatar">
+                    <div class="post-user-meta">
+                        <span class="username">my_profile</span>
+                        <span class="time-stamp">Just now</span>
+                    </div>
+                </div>
+                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600" class="post-content-img">
+                <div class="post-action-bar">
+                    <div class="action-icon" onclick="handleLike(this)">
+                        <i class="fa-regular fa-heart"></i> <span class="like-num">0</span>
+                    </div>
+                    <div class="action-icon">
+                        <i class="fa-regular fa-comment"></i>
+                    </div>
+                </div>
+                <div class="post-content-text">
+                    Welcome to this clean slate! Feel free to add text and images above to create new posts.
+                </div>
+                <div class="comments-section">
+                    <ul class="comments-box-list">
+                        <li><strong>alex_j:</strong> Looks incredibly clean! Clean layout 🌟</li>
+                    </ul>
+                    <div class="input-comment-row">
+                        <input type="text" placeholder="Write a comment...">
+                        <button class="send-comment-btn" onclick="handleComment(this)">Send</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- App Bottom Navigation Bar -->
+    <div class="bottom-nav">
+        <i class="fa-solid fa-house active-nav"></i>
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <i class="fa-regular fa-square-plus" onclick="document.getElementById('postInputText').focus()"></i>
+        <i class="fa-regular fa-user"></i>
+    </div>
+
+    <script>
+        // Toggle Image Input Field
+        function toggleUrlInput() {
+            const imgField = document.getElementById('postImgUrl');
+            imgField.style.display = (imgField.style.display === 'block') ? 'none' : 'block';
+            if(imgField.style.display === 'block') imgField.focus();
+        }
+
+        // Handle Post Likes
+        function handleLike(element) {
+            const icon = element.querySelector('i');
+            const countSpan = element.querySelector('.like-num');
+            let currentLikes = parseInt(countSpan.innerText);
+
+            if (icon.classList.contains('fa-regular')) {
+                icon.classList.remove('fa-regular');
+                icon.classList.add('fa-solid', 'active-liked');
+                countSpan.innerText = currentLikes + 1;
+            } else {
+                icon.classList.remove('fa-solid', 'active-liked');
+                icon.classList.add('fa-regular');
+                countSpan.innerText = currentLikes - 1;
+            }
+        }
+
+        // Handle Commenting
+        function handleComment(btn) {
+            const inputField = btn.previousElementSibling;
+            const text = inputField.value.trim();
+            if(text === "") return;
+
+            const list = btn.parentElement.previousElementSibling;
+            const newLi = document.createElement('li');
+            newLi.innerHTML = `<strong>visitor:</strong> ${text}`;
+            list.appendChild(newLi);
+            
+            inputField.value = "";
+        }
+
+        // Add a New Post
+        function addNewPost() {
+            const txt = document.getElementById('postInputText').value.trim();
+            let url = document.getElementById('postImgUrl').value.trim();
+
+            if(txt === "" && url === "") {
+                alert("Please type something or insert an image link!");
+                return;
+            }
+
+            // Fallback placeholder if image input is shown but empty
+            if(document.getElementById('postImgUrl').style.display === 'block' && url === "") {
+                url = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600";
+            }
+
+            const feed = document.getElementById('mainFeed');
+            
+            let imgTag = url ? `<img src="${url}" class="post-content-img">` : '';
+
+            const newCardHTML = `
+                <div class="post-card">
+                    <div class="post-card-header">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="user-avatar">
+                        <div class="post-user-meta">
+                            <span class="username">my_profile</span>
+                            <span class="time-stamp">Just now</span>
+                        </div>
+                    </div>
+                    ${imgTag}
+                    <div class="post-action-bar">
+                        <div class="action-icon" onclick="handleLike(this)">
+                            <i class="fa-regular fa-heart"></i> <span class="like-num">0</span>
+                        </div>
+                        <div class="action-icon">
+                            <i class="fa-regular fa-comment"></i>
+                        </div>
+                    </div>
+                    <div class="post-content-text">${txt}</div>
+                    <div class="comments-section">
+                        <ul class="comments-box-list"></ul>
+                        <div class="input-comment-row">
+                            <input type="text" placeholder="Write a comment...">
+                            <button class="send-comment-btn" onclick="handleComment(this)">Send</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            feed.insertAdjacentHTML('afterbegin', newCardHTML);
+
+            // Reset and Close fields
+            document.getElementById('postInputText').value = "";
+            document.getElementById('postImgUrl').value = "";
+            document.getElementById('postImgUrl').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
