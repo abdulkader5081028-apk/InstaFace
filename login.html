@@ -25,18 +25,17 @@
 
         .login-container {
             width: 100%;
-            max-width: 380px;
-            padding: 20px;
+            max-width: 360px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* Instagram Logo Text Style */
+        /* Instagram Gradient Logo Style */
         .insta-logo {
-            font-family: 'Billabong', cursive, sans-serif; /* fallback */
-            font-size: 45px;
-            font-weight: 500;
+            font-size: 42px;
+            font-weight: 700;
             margin-bottom: 35px;
             letter-spacing: 1px;
             background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af, #515bd4);
@@ -46,18 +45,19 @@
 
         .input-box {
             width: 100%;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .input-box input {
             width: 100%;
-            padding: 12px 14px;
+            padding: 14px 16px;
             background: #121212;
             border: 1px solid #262626;
-            border-radius: 5px;
+            border-radius: 8px;
             color: #ffffff;
             font-size: 14px;
             outline: none;
+            transition: border-color 0.2s;
         }
 
         .input-box input:focus {
@@ -66,7 +66,7 @@
 
         .login-btn {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: #0095f6;
             border: none;
             border-radius: 8px;
@@ -74,8 +74,8 @@
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 12px;
-            margin-bottom: 20px;
+            margin-top: 8px;
+            margin-bottom: 25px;
         }
 
         .login-btn:active {
@@ -83,10 +83,9 @@
         }
 
         .forgot-pass {
-            font-size: 12px;
+            font-size: 13px;
             color: #a8a8a8;
             text-decoration: none;
-            margin-bottom: 40px;
         }
 
         .forgot-pass:hover {
@@ -97,9 +96,9 @@
             position: absolute;
             bottom: 30px;
             width: 100%;
-            max-width: 380px;
+            max-width: 360px;
             border-top: 1px solid #262626;
-            padding-top: 15px;
+            padding-top: 18px;
             text-align: center;
             font-size: 14px;
             color: #a8a8a8;
@@ -133,7 +132,7 @@
 
     <!-- Bottom Sign up switcher -->
     <div class="signup-box">
-        Don't have an account? <span onclick="handleSignup()">Sign up.</span>
+        Don't have an account? <span onclick="alert('Sign up feature coming soon!')">Sign up.</span>
     </div>
 
     <script>
@@ -142,14 +141,9 @@
             if(user.trim() === "") {
                 alert('Please enter your username or email');
             } else {
-                alert('Login successful! Redirecting to feed...');
+                alert('Login successful! Welcome back, ' + user);
                 window.location.href = 'index.html';
             }
-        }
-
-        function handleSignup() {
-            alert('Redirecting to sign up registration matrix...');
-            // চাইলে এখানে নতুন অ্যাকাউন্ট খোলার পেজে রিডাইরেক্ট করতে পারেন
         }
     </script>
 </body>
