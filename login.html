@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Instagram • Login</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -32,7 +31,6 @@
             align-items: center;
         }
 
-        /* Instagram Gradient Logo Style */
         .insta-logo {
             font-size: 42px;
             font-weight: 700;
@@ -57,11 +55,6 @@
             color: #ffffff;
             font-size: 14px;
             outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .input-box input:focus {
-            border-color: #a855f7;
         }
 
         .login-btn {
@@ -76,20 +69,6 @@
             cursor: pointer;
             margin-top: 8px;
             margin-bottom: 25px;
-        }
-
-        .login-btn:active {
-            opacity: 0.7;
-        }
-
-        .forgot-pass {
-            font-size: 13px;
-            color: #a8a8a8;
-            text-decoration: none;
-        }
-
-        .forgot-pass:hover {
-            color: #ffffff;
         }
 
         .signup-box {
@@ -114,10 +93,8 @@
 <body>
 
     <div class="login-container">
-        <!-- Logo -->
         <div class="insta-logo">Instagram</div>
 
-        <!-- Form Fields -->
         <div class="input-box">
             <input type="text" id="username" placeholder="Phone number, username, or email">
         </div>
@@ -126,22 +103,20 @@
         </div>
 
         <button class="login-btn" onclick="handleLogin()">Log in</button>
-
-        <a href="#" class="forgot-pass" onclick="alert('Password reset link sent!')">Forgot password?</a>
     </div>
 
-    <!-- Bottom Sign up switcher -->
     <div class="signup-box">
-        Don't have an account? <span onclick="alert('Sign up feature coming soon!')">Sign up.</span>
+        Don't have an account? <span onclick="alert('Sign up feature ready!')">Sign up.</span>
     </div>
 
     <script>
         function handleLogin() {
             const user = document.getElementById('username').value;
             if(user.trim() === "") {
-                alert('Please enter your username or email');
+                alert('Please enter your username');
             } else {
-                alert('Login successful! Welcome back, ' + user);
+                localStorage.setItem('cyberUser', user);
+                alert('Login successful!');
                 window.location.href = 'index.html';
             }
         }
