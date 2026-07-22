@@ -3,111 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mind Match - বুদ্ধির খেলা</title>
+    <title>Mind Match - Premium Edition</title>
     <style>
-        /* গেমের ব্যাকগ্রাউন্ড ও সুন্দর ডিজাইন */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at center, #1e1e2f 0%, #0f0f1a 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-            color: #fff;
+            min-height: 100vh;
+            color: #ffffff;
             overflow: hidden;
         }
 
+        /* নিয়ন গ্লোয়িং টাইটেল */
         h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
             margin-bottom: 5px;
-            letter-spacing: 2px;
-            text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-            color: #00cec9;
         }
 
         .subtitle {
-            font-size: 1rem;
-            margin-bottom: 25px;
-            color: #dfe6e9;
-            opacity: 0.8;
+            font-size: 0.9.5rem;
+            color: #7070a0;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
         }
 
-        .status {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            padding: 8px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        /* আধুনিক স্ট্যাটাস বার */
+        .status-container {
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
         }
 
-        /* ৩x৩ গেম বোর্ড */
+        /* থ্রিডি গ্লাস বোর্ড */
         .board {
             display: grid;
-            grid-template-columns: repeat(3, 90px);
-            grid-template-rows: repeat(3, 90px);
+            grid-template-columns: repeat(3, 95px);
+            grid-template-rows: repeat(3, 95px);
             gap: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 20px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
         }
 
-        /* বোর্ডের প্রতিটি ঘর */
+        /* প্রিমিয়াম সেল বা ঘর */
         .cell {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.8rem;
-            font-weight: bold;
-            color: #2d3436;
+            font-size: 3rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 0 0 0 rgba(255, 255, 255, 0);
         }
 
+        /* হোভার এবং ক্লিক অ্যানিমেশন */
         .cell:hover {
-            transform: scale(1.05);
-            background: #ffffff;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
         }
 
-        /* রিস্টার্ট বাটন */
+        .cell:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* এক্স এবং ও এর জন্য স্পেশাল গ্লো ইফেক্ট */
+        .cell.x-active {
+            color: #00f2fe;
+            text-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
+        }
+
+        .cell.o-active {
+            color: #ff4757;
+            text-shadow: 0 0 20px rgba(255, 71, 87, 0.6);
+        }
+
+        /* নিয়ন রিস্টার্ট বাটন */
         .btn {
-            margin-top: 30px;
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            background: #ff7675;
-            color: white;
+            margin-top: 35px;
+            padding: 14px 35px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ffffff;
+            background: linear-gradient(45deg, #ff4757, #ff6b81);
             border: none;
-            border-radius: 25px;
+            border-radius: 50px;
             cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 71, 87, 0.3);
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 118, 117, 0.4);
         }
 
         .btn:hover {
-            background: #d63031;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(214, 48, 49, 0.5);
+            box-shadow: 0 15px 30px rgba(255, 71, 87, 0.5);
+            background: linear-gradient(45deg, #ff6b81, #ff4757);
+        }
+
+        .btn:active {
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
 
-    <h1>MIND MATCH</h1>
-    <div class="subtitle">আপনার বুদ্ধির চাল দিন</div>
+    <h1>Mind Match</h1>
+    <div class="subtitle">Ultimate Brain Duel</div>
     
-    <div class="status" id="status">X এর চাল (Player 1)</div>
+    <div class="status-container" id="status">X এর চাল (Player 1)</div>
     
     <div class="board" id="board">
-        <!-- গেমের ৯টি ঘর -->
         <div class="cell" onclick="makeMove(this, 0)"></div>
         <div class="cell" onclick="makeMove(this, 1)"></div>
         <div class="cell" onclick="makeMove(this, 2)"></div>
@@ -119,32 +157,35 @@
         <div class="cell" onclick="makeMove(this, 8)"></div>
     </div>
 
-    <button class="btn" onclick="resetGame()">আবার খেলুন</button>
-        <!-- গেমের মূল লজিক (JavaScript) -->
+    <button class="btn" onclick="resetGame()">রিস্টার্ট করুন</button>
+
     <script>
         let board = ["", "", "", "", "", "", "", "", ""];
         let currentPlayer = "X";
         let gameActive = true;
         const statusDisplay = document.getElementById('status');
 
-        // জেতার জন্য প্রয়োজনীয় ঘরের কম্বিনেশন
-        const winPatterns = [, [3, 4, 5], [6, 7, 8], // পাশাপাশি, [1, 4, 7], [2, 5, 8], // উপর-নিচ, [2, 4, 6]             // কোণাকুণি
+        const winPatterns = [, [3, 4, 5], [6, 7, 8],
+, [1, 4, 7], [2, 5, 8],
+, [2, 4, 6]
         ];
 
-        // ঘরে ক্লিক করলে যা হবে
         function makeMove(cell, index) {
             if (board[index] !== "" || !gameActive) return;
 
             board[index] = currentPlayer;
             cell.innerText = currentPlayer;
             
-            // X এবং O এর জন্য আলাদা সুন্দর রঙ
-            cell.style.color = currentPlayer === "X" ? "#00cec9" : "#ff7675";
+            // প্লেয়ার অনুযায়ী ক্লাস যোগ করে কালার ও গ্লো দেওয়া হচ্ছে
+            if (currentPlayer === "X") {
+                cell.classList.add('x-active');
+            } else {
+                cell.classList.add('o-active');
+            }
 
             checkResult();
         }
 
-        // কে জিতল তা পরীক্ষা করার নিয়ম
         function checkResult() {
             let roundWon = false;
             for (let i = 0; i < winPatterns.length; i++) {
@@ -156,37 +197,39 @@
             }
 
             if (roundWon) {
-                statusDisplay.innerText = `অভিনন্দন! ${currentPlayer} জিতে গেছে! 🎉`;
-                statusDisplay.style.color = "#55efc4";
+                statusDisplay.innerText = `বিজয়ী: প্লেয়ার ${currentPlayer}! 🏆`;
+                statusDisplay.style.borderColor = currentPlayer === "X" ? "#00f2fe" : "#ff4757";
+                statusDisplay.style.boxShadow = `0 10px 30px ${currentPlayer === "X" ? "rgba(0,242,254,0.3)" : "rgba(255,71,87,0.3)"}`;
                 gameActive = false;
                 return;
             }
 
-            // ম্যাচ ড্র হলে
             if (!board.includes("")) {
-                statusDisplay.innerText = "খেলাটি ড্র হয়েছে! 🤝";
-                statusDisplay.style.color = "#ffeaa7";
+                statusDisplay.innerText = "ম্যাচ ড্র! 🤝";
+                statusDisplay.style.borderColor = "#95a5a6";
                 gameActive = false;
                 return;
             }
 
-            // চাল পরিবর্তন করা
             currentPlayer = currentPlayer === "X" ? "O" : "X";
-            statusDisplay.innerText = `${currentPlayer} এর চাল (${currentPlayer === 'X' ? 'Player 1' : 'Player 2'})`;
+            statusDisplay.innerText = `${currentPlayer} এর চাল (Player ${currentPlayer === 'X' ? '1' : '2'})`;
         }
 
-        // গেমটি আবার নতুন করে শুরু করার বাটন
         function resetGame() {
             board = ["", "", "", "", "", "", "", "", ""];
             currentPlayer = "X";
             gameActive = true;
             statusDisplay.innerText = "X এর চাল (Player 1)";
-            statusDisplay.style.color = "#fff";
+            statusDisplay.style.borderColor = "rgba(255, 255, 255, 0.1)";
+            statusDisplay.style.boxShadow = "0 10px 25px rgba(0, 0, 0, 0.3)";
+            
             document.querySelectorAll('.cell').forEach(cell => {
                 cell.innerText = "";
+                cell.classList.remove('x-active', 'o-active');
             });
         }
     </script>
 </body>
 </html>
+
 
