@@ -1,2 +1,2 @@
 # Mind-Match
-play is your knowledge! 
+play is your knowledge!  
