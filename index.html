@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mind Match - বুদ্ধির খেলা</title>
+    <style>
+        /* গেমের ব্যাকগ্রাউন্ড ও সুন্দর ডিজাইন */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+            text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            color: #00cec9;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            margin-bottom: 25px;
+            color: #dfe6e9;
+            opacity: 0.8;
+        }
+
+        .status {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* ৩x৩ গেম বোর্ড */
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 90px);
+            grid-template-rows: repeat(3, 90px);
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* বোর্ডের প্রতিটি ঘর */
+        .cell {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #2d3436;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .cell:hover {
+            transform: scale(1.05);
+            background: #ffffff;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        /* রিস্টার্ট বাটন */
+        .btn {
+            margin-top: 30px;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            background: #ff7675;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 118, 117, 0.4);
+        }
+
+        .btn:hover {
+            background: #d63031;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(214, 48, 49, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>MIND MATCH</h1>
+    <div class="subtitle">আপনার বুদ্ধির চাল দিন</div>
+    
+    <div class="status" id="status">X এর চাল (Player 1)</div>
+    
+    <div class="board" id="board">
+        <!-- গেমের ৯টি ঘর -->
+        <div class="cell" onclick="makeMove(this, 0)"></div>
+        <div class="cell" onclick="makeMove(this, 1)"></div>
+        <div class="cell" onclick="makeMove(this, 2)"></div>
+        <div class="cell" onclick="makeMove(this, 3)"></div>
+        <div class="cell" onclick="makeMove(this, 4)"></div>
+        <div class="cell" onclick="makeMove(this, 5)"></div>
+        <div class="cell" onclick="makeMove(this, 6)"></div>
+        <div class="cell" onclick="makeMove(this, 7)"></div>
+        <div class="cell" onclick="makeMove(this, 8)"></div>
+    </div>
+
+    <button class="btn" onclick="resetGame()">আবার খেলুন</button>
