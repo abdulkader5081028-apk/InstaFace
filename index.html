@@ -120,3 +120,73 @@
     </div>
 
     <button class="btn" onclick="resetGame()">আবার খেলুন</button>
+        <!-- গেমের মূল লজিক (JavaScript) -->
+    <script>
+        let board = ["", "", "", "", "", "", "", "", ""];
+        let currentPlayer = "X";
+        let gameActive = true;
+        const statusDisplay = document.getElementById('status');
+
+        // জেতার জন্য প্রয়োজনীয় ঘরের কম্বিনেশন
+        const winPatterns = [, [3, 4, 5], [6, 7, 8], // পাশাপাশি, [1, 4, 7], [2, 5, 8], // উপর-নিচ, [2, 4, 6]             // কোণাকুণি
+        ];
+
+        // ঘরে ক্লিক করলে যা হবে
+        function makeMove(cell, index) {
+            if (board[index] !== "" || !gameActive) return;
+
+            board[index] = currentPlayer;
+            cell.innerText = currentPlayer;
+            
+            // X এবং O এর জন্য আলাদা সুন্দর রঙ
+            cell.style.color = currentPlayer === "X" ? "#00cec9" : "#ff7675";
+
+            checkResult();
+        }
+
+        // কে জিতল তা পরীক্ষা করার নিয়ম
+        function checkResult() {
+            let roundWon = false;
+            for (let i = 0; i < winPatterns.length; i++) {
+                const [a, b, c] = winPatterns[i];
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    roundWon = true;
+                    break;
+                }
+            }
+
+            if (roundWon) {
+                statusDisplay.innerText = `অভিনন্দন! ${currentPlayer} জিতে গেছে! 🎉`;
+                statusDisplay.style.color = "#55efc4";
+                gameActive = false;
+                return;
+            }
+
+            // ম্যাচ ড্র হলে
+            if (!board.includes("")) {
+                statusDisplay.innerText = "খেলাটি ড্র হয়েছে! 🤝";
+                statusDisplay.style.color = "#ffeaa7";
+                gameActive = false;
+                return;
+            }
+
+            // চাল পরিবর্তন করা
+            currentPlayer = currentPlayer === "X" ? "O" : "X";
+            statusDisplay.innerText = `${currentPlayer} এর চাল (${currentPlayer === 'X' ? 'Player 1' : 'Player 2'})`;
+        }
+
+        // গেমটি আবার নতুন করে শুরু করার বাটন
+        function resetGame() {
+            board = ["", "", "", "", "", "", "", "", ""];
+            currentPlayer = "X";
+            gameActive = true;
+            statusDisplay.innerText = "X এর চাল (Player 1)";
+            statusDisplay.style.color = "#fff";
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.innerText = "";
+            });
+        }
+    </script>
+</body>
+</html>
+
